@@ -1,18 +1,67 @@
 import Head from 'next/head';
 import Link from 'next/link';
-import { Stack, FormControl, InputGroup, InputLeftElement, Input, FormErrorMessage, Text, Button, Flex, Box, Heading, Link as Clink } from '@chakra-ui/react';
-import { LockIcon, ViewIcon, AtSignIcon, EmailIcon } from '@chakra-ui/icons';
+import { useRouter } from 'next/router';
+import { Stack, FormControl, InputGroup, InputLeftElement, Input, FormErrorMessage, Text, Button, Flex, Box, Heading, Link as Clink, useToast } from '@chakra-ui/react';
+import { LockIcon, ViewIcon, EmailIcon, AtSignIcon } from '@chakra-ui/icons';
 import { Formik, Form, Field } from 'formik';
+import { validateSignupVariables } from '../src/utils/authHelpers';
+import { gql, useMutation } from '@apollo/client';
+import { SignupMutationVariables, SignupMutation } from '../src/__generated__/SignupMutation';
+import { useAuth } from '../src/store/User';
+import { useEffect } from 'react';
 
-const initialValues = {
+const SIGNUP_MUTATION = gql`
+  mutation SignupMutation($name: String!, $surname: String!, $email: String!, $username: String!, $password: String! $avatar: String) {
+    signup(name: $name, surname: $surname, email: $email, username: $username password: $password, avatar: $avatar)
+  }
+`;
+
+const initialValues: SignupMutationVariables = {
   email: '',
   name: '',
+  username: '',
   surname: '',
   password: '',
   avatar: '',
 };
 
 function Signup() {
+
+  const toast = useToast();
+  const router = useRouter();
+  const { isAuth } = useAuth();
+  const [signup, { loading }] = useMutation<SignupMutation, SignupMutationVariables>(SIGNUP_MUTATION, {
+    onCompleted: ({ signup }) => {
+      if(signup) {
+        toast({
+          title: 'Account created',
+          description: 'Your account has been succesfully created. Enter your username and password to Login!',
+          status: 'success',
+          duration: 3000,
+          position: 'top-right',
+          isClosable: true
+        });
+      }
+      router.push('/login');
+    },
+    onError: () => {
+      toast({
+        title: 'An error occurred',
+        description: 'User already exixst',
+        status: 'error',
+        duration: 3000,
+        position: 'top-right',
+        isClosable: true
+      });
+    }
+  });
+
+  useEffect(() => {
+    if(isAuth) {
+      router.push('/');
+    }
+  }, []);
+
   return (
     <div>
       <Head>
@@ -20,17 +69,36 @@ function Signup() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Flex align="center" mt={['16', '16', '32']} direction="column">
+      <Flex align="center" direction="column">
         <Box>
-          <Heading mb="4" fontStyle="italic" textAlign="center">Signu up</Heading>
+          
+          <Heading mb="4" fontStyle="italic" textAlign="center">
+            Sign up
+          </Heading>
+          
           <Formik
             initialValues={initialValues}
-            onSubmit={values => {
-              console.log(values);
+            validate={validateSignupVariables}
+            onSubmit={variables => {
+              signup({
+                variables
+              });
             }}
           >
             {formik => <Form>
-              <Stack spacing="3" w="xs">
+              <Stack spacing="4" w="xs">
+
+                <Stack direction="row" spacing="4">
+                  <FormControl isInvalid={formik.touched.name && !!formik.errors.name}>
+                    <Input as={Field} type="text" placeholder="Nome" name="name" id="name" />
+                    <FormErrorMessage>{formik.errors.name}</FormErrorMessage>
+                  </FormControl>
+
+                  <FormControl isInvalid={formik.touched.surname && !!formik.errors.surname}>
+                    <Input as={Field} type="text" placeholder="Cognome" name="surname" id="surname" />
+                    <FormErrorMessage>{formik.errors.surname}</FormErrorMessage>
+                  </FormControl>
+                </Stack>
 
                 <FormControl isInvalid={formik.touched.email && !!formik.errors.email}>
                   <InputGroup>
@@ -42,24 +110,14 @@ function Signup() {
                   <FormErrorMessage>{formik.errors.email}</FormErrorMessage>
                 </FormControl>
 
-                <FormControl isInvalid={formik.touched.name && !!formik.errors.name}>
+                <FormControl isInvalid={formik.touched.username && !!formik.errors.username}>
                   <InputGroup>
-                    <InputLeftElement>
+                    <InputLeftElement >
                       <AtSignIcon />
                     </InputLeftElement>
-                    <Input as={Field} type="text" placeholder="Nome" name="name" id="name" />
+                    <Input as={Field} type="text" placeholder="Username" name="username" id="username" />
                   </InputGroup>
-                  <FormErrorMessage>{formik.errors.name}</FormErrorMessage>
-                </FormControl>
-
-                <FormControl isInvalid={formik.touched.surname && !!formik.errors.surname}>
-                  <InputGroup>
-                    <InputLeftElement>
-                      <AtSignIcon />
-                    </InputLeftElement>
-                    <Input as={Field} type="text" placeholder="Cognome" name="surname" id="surname" />
-                  </InputGroup>
-                  <FormErrorMessage>{formik.errors.surname}</FormErrorMessage>
+                  <FormErrorMessage>{formik.errors.username}</FormErrorMessage>
                 </FormControl>
 
                 <FormControl isInvalid={formik.touched.password && !!formik.errors.password}>
@@ -82,12 +140,14 @@ function Signup() {
                   <FormErrorMessage>{formik.errors.avatar}</FormErrorMessage>
                 </FormControl>
 
-                <Button type="submit" colorScheme="blue">Sign up</Button>
-                <Text>Possiedi già un account?&nbsp;
+                <Button type="submit" colorScheme="blue" isLoading={loading}>Sign up</Button>
+                
+                <Text>Already have an account?&nbsp;
                   <Link href="/login">
-                    <Clink color="blue.400">Effettua il login!</Clink>
+                    <Clink color="blue.400">Login Now!</Clink>
                   </Link>
                 </Text>
+
               </Stack>
             </Form>}
           </Formik>

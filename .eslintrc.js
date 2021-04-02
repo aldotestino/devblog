@@ -22,6 +22,9 @@ module.exports = {
     '@typescript-eslint'
   ],
   'rules': {
+    '@typescript-eslint/no-non-null-assertion': 0,
+    '@typescript-eslint/no-var-requires': 0,
+    '@typescript-eslint/explicit-module-boundary-types': 0,
     'react/react-in-jsx-scope': 0,
     'comma-spacing': ['error', { 'before': false, 'after': true }],
     'object-curly-spacing': ['error', 'always'],

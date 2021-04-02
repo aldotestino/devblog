@@ -10,7 +10,7 @@ function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Flex mt={['16', '16', '32']} justify="space-between" direction={['column', 'column', 'row']}>
+      <Flex justify="space-between" direction={['column', 'column', 'row']}>
         <Box textAlign={['center', 'center', 'left']}>
           <Heading fontSize="6xl" bgGradient="linear(to-l, #DB00FF, #00A3FF)" bgClip="text">
             Enter in The Biggest

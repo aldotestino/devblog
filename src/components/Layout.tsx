@@ -11,7 +11,7 @@ function Layout({ children }: LayoutProps) {
   return (
     <Flex minH="100vh" direction="column">
       <Navbar />
-      <Box px={['2', '16']}>
+      <Box px={['2', '16']} py={['16', '16', '32']}>
         {children}
       </Box>
       <Spacer />
