@@ -4,7 +4,7 @@ import { Flex, Heading, Box, Stack, Button, Img } from '@chakra-ui/react';
 
 function Home() {
   return (
-    <div>
+    <>
       <Head>
         <title>devBlog</title>
         <link rel="icon" href="/favicon.ico" />
@@ -32,7 +32,7 @@ function Home() {
           <Img width={['80%', '80%', '50%']} mb={['4', '4', '0']} src="/homeImage.svg" />
         </Flex>
       </Flex>
-    </div>
+    </>
   );
 }
 

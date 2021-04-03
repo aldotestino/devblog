@@ -42,7 +42,7 @@ function Login() {
         ...user,
         token
       });
-      router.push('/');
+      router.back();
     },
     onError: (e) => {
       toast({
@@ -63,7 +63,7 @@ function Login() {
   }, []);
 
   return (
-    <div>
+    <>
       <Head>
         <title>devBlog - login</title>
         <link rel="icon" href="/favicon.ico" />
@@ -81,42 +81,49 @@ function Login() {
               });
             }}
           >
-            {formik => <Form>
-              <Stack spacing="4" w="xs">
+            {formik => 
+              <Form>
+                <Stack spacing="4" w="xs">
 
-                <FormControl isInvalid={formik.touched.username && !!formik.errors.username}>
-                  <InputGroup>
-                    <InputLeftElement >
-                      <AtSignIcon />
-                    </InputLeftElement>
-                    <Input as={Field} type="text" placeholder="Username" name="username" id="username" />
-                  </InputGroup>
-                  <FormErrorMessage>{formik.errors.username}</FormErrorMessage>
-                </FormControl>
+                  <Field name="username">
+                    {({ field }) => 
+                      <FormControl isInvalid={formik.touched.username && !!formik.errors.username}>
+                        <InputGroup>
+                          <InputLeftElement >
+                            <AtSignIcon />
+                          </InputLeftElement>
+                          <Input {...field} type="text" placeholder="Username" />
+                        </InputGroup>
+                        <FormErrorMessage>{formik.errors.username}</FormErrorMessage>
+                      </FormControl>}
+                  </Field>
 
-                <FormControl isInvalid={formik.touched.password && !!formik.errors.password}>
-                  <InputGroup>
-                    <InputLeftElement>
-                      <LockIcon />
-                    </InputLeftElement>
-                    <Input as={Field} type="password" placeholder="Password" name="password" id="password" />
-                  </InputGroup>
-                  <FormErrorMessage>{formik.errors.password}</FormErrorMessage>
-                </FormControl>
+                  <Field name="password">
+                    {({ field }) => 
+                      <FormControl isInvalid={formik.touched.password && !!formik.errors.password}>
+                        <InputGroup>
+                          <InputLeftElement>
+                            <LockIcon />
+                          </InputLeftElement>
+                          <Input {...field} type="password" placeholder="Password" />
+                        </InputGroup>
+                        <FormErrorMessage>{formik.errors.password}</FormErrorMessage>
+                      </FormControl>}
+                  </Field>
 
-                <Button type="submit" colorScheme="blue" isLoading={loading}>Login</Button>
+                  <Button type="submit" colorScheme="blue" isLoading={loading}>Login</Button>
 
-                <Text>Don&apos;t have an account?&nbsp;
-                  <Link href="/signup">
-                    <Clink color="blue.400">Sign up Now!</Clink>
-                  </Link>
-                </Text>
-              </Stack>
-            </Form>}
+                  <Text>Don't have an account?&nbsp;
+                    <Link href="/signup">
+                      <Clink color="blue.400">Sign up Now!</Clink>
+                    </Link>
+                  </Text>
+                </Stack>
+              </Form>}
           </Formik>
         </Box>
       </Flex>
-    </div>
+    </>
   );
 }
 

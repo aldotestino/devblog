@@ -21,6 +21,7 @@ export const typeDefs = gql`
     user: User!     
     likes: [Like!]!
     comments: [Comment!]!
+    cretedAt: DateTime
   }
 
   type Like {
@@ -34,10 +35,7 @@ export const typeDefs = gql`
     content: String!
     user: User!
     post: Post!
-  }
-
-  type Query {
-    hello: String
+    createdAt: DateTime
   }
 
   type AuthPayload {
@@ -45,9 +43,16 @@ export const typeDefs = gql`
     token: String!
   }
 
+  type Query {
+    user(username: String!): User
+  }
+
   type Mutation {
     signup(name: String!, surname: String!, email: String!, username: String! password: String!, avatar: String): Boolean!
     login(username: String!, password: String!): AuthPayload
+    post(title: String!, description: String!, content: String!): Post!
   }
+
+  scalar DateTime
 `;
 

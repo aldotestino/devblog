@@ -4,17 +4,15 @@ import { JWT_SECRET } from '../../utils/authHelpers';
 import { ResolverFunc } from '../../utils/types';
 import { LoginMutationVariables } from '../../__generated__/LoginMutation';
 import { SignupMutationVariables } from '../../__generated__/SignupMutation';
+import prisma from '../../lib/prisma';
+import { PostMutationVariables } from '../../__generated__/PostMutation';
 
-const signup: ResolverFunc<unknown, SignupMutationVariables> = async (_, args, { prisma }) => {
-  const hashedPassword = await bcrypt.hash(args.password, 10);
+const signup: ResolverFunc<unknown, SignupMutationVariables> = async (_, { password, ...rest }) => {
+  const hashedPassword = await bcrypt.hash(password, 10);
 
   await prisma.user.create({
     data: {
-      name: args.name,
-      surname: args.username,
-      username: args.username,
-      email: args.email,
-      avatar: args.avatar,
+      ...rest,
       password: hashedPassword
     }
   });
@@ -22,7 +20,7 @@ const signup: ResolverFunc<unknown, SignupMutationVariables> = async (_, args, {
   return true;
 };
 
-const login: ResolverFunc<unknown, LoginMutationVariables> = async (_, { password, username }, { prisma }) => {
+const login: ResolverFunc<unknown, LoginMutationVariables> = async (_, { password, username }) => {
   const user = await prisma.user.findUnique({
     where: {
       username
@@ -48,8 +46,18 @@ const login: ResolverFunc<unknown, LoginMutationVariables> = async (_, { passwor
 
 };
 
+const post: ResolverFunc<unknown, PostMutationVariables> = (_, args, { userId }) => {
+  return prisma.post.create({
+    data: {
+      ...args,
+      userId
+    }
+  });
+};
+
 
 export {
   signup,
-  login
+  login,
+  post
 };

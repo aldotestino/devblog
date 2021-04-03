@@ -63,7 +63,7 @@ function Signup() {
   }, []);
 
   return (
-    <div>
+    <>
       <Head>
         <title>devBlog - signup</title>
         <link rel="icon" href="/favicon.ico" />
@@ -85,75 +85,94 @@ function Signup() {
               });
             }}
           >
-            {formik => <Form>
-              <Stack spacing="4" w="xs">
+            {formik => 
+              <Form>
+                <Stack spacing="4" w="xs">
 
-                <Stack direction="row" spacing="4">
-                  <FormControl isInvalid={formik.touched.name && !!formik.errors.name}>
-                    <Input as={Field} type="text" placeholder="Nome" name="name" id="name" />
-                    <FormErrorMessage>{formik.errors.name}</FormErrorMessage>
-                  </FormControl>
+                  <Stack direction="row" spacing="4">
+                    <Field name="name">
+                      {({ field }) => 
+                        <FormControl isInvalid={formik.touched.name && !!formik.errors.name}>
+                          <Input {...field} type="text" placeholder="Name" id="name" />
+                          <FormErrorMessage>{formik.errors.name}</FormErrorMessage>
+                        </FormControl>}
+                    </Field>
 
-                  <FormControl isInvalid={formik.touched.surname && !!formik.errors.surname}>
-                    <Input as={Field} type="text" placeholder="Cognome" name="surname" id="surname" />
-                    <FormErrorMessage>{formik.errors.surname}</FormErrorMessage>
-                  </FormControl>
-                </Stack>
+                    <Field name="surname">
+                      {({ field }) => 
+                        <FormControl isInvalid={formik.touched.surname && !!formik.errors.surname}>
+                          <Input {...field} type="text" placeholder="Surname" id="surname" />
+                          <FormErrorMessage>{formik.errors.surname}</FormErrorMessage>
+                        </FormControl>}
+                    </Field>
+                  </Stack>
 
-                <FormControl isInvalid={formik.touched.email && !!formik.errors.email}>
-                  <InputGroup>
-                    <InputLeftElement >
-                      <EmailIcon />
-                    </InputLeftElement>
-                    <Input as={Field} type="text" placeholder="Email" name="email" id="email" />
-                  </InputGroup>
-                  <FormErrorMessage>{formik.errors.email}</FormErrorMessage>
-                </FormControl>
+                  <Field name="email">
+                    {({ field }) => 
+                      <FormControl isInvalid={formik.touched.email && !!formik.errors.email}>
+                        <InputGroup>
+                          <InputLeftElement >
+                            <EmailIcon />
+                          </InputLeftElement>
+                          <Input {...field} type="text" placeholder="Email" id="email" />
+                        </InputGroup>
+                        <FormErrorMessage>{formik.errors.email}</FormErrorMessage>
+                      </FormControl>}
+                  </Field>
 
-                <FormControl isInvalid={formik.touched.username && !!formik.errors.username}>
-                  <InputGroup>
-                    <InputLeftElement >
-                      <AtSignIcon />
-                    </InputLeftElement>
-                    <Input as={Field} type="text" placeholder="Username" name="username" id="username" />
-                  </InputGroup>
-                  <FormErrorMessage>{formik.errors.username}</FormErrorMessage>
-                </FormControl>
+                  <Field name="username">
+                    {({ field }) => 
+                      <FormControl isInvalid={formik.touched.username && !!formik.errors.username}>
+                        <InputGroup>
+                          <InputLeftElement >
+                            <AtSignIcon />
+                          </InputLeftElement>
+                          <Input {...field} placeholder="Username" id="username" />
+                        </InputGroup>
+                        <FormErrorMessage>{formik.errors.username}</FormErrorMessage>
+                      </FormControl>}
+                  </Field>
 
-                <FormControl isInvalid={formik.touched.password && !!formik.errors.password}>
-                  <InputGroup>
-                    <InputLeftElement>
-                      <LockIcon />
-                    </InputLeftElement>
-                    <Input as={Field} type="password" placeholder="Password" name="password" id="password" />
-                  </InputGroup>
-                  <FormErrorMessage>{formik.errors.password}</FormErrorMessage>
-                </FormControl>
+                  <Field name="password">
+                    {({ field }) =>
+                      <FormControl isInvalid={formik.touched.password && !!formik.errors.password}>
+                        <InputGroup>
+                          <InputLeftElement>
+                            <LockIcon />
+                          </InputLeftElement>
+                          <Input {...field} type="password" placeholder="Password" id="password" />
+                        </InputGroup>
+                        <FormErrorMessage>{formik.errors.password}</FormErrorMessage>
+                      </FormControl>}
+                  </Field>
 
-                <FormControl isInvalid={formik.touched.avatar && !!formik.errors.avatar}>
-                  <InputGroup>
-                    <InputLeftElement>
-                      <ViewIcon />
-                    </InputLeftElement>
-                    <Input as={Field} type="text" placeholder="Avatar" name="avatar" id="avatar" />
-                  </InputGroup>
-                  <FormErrorMessage>{formik.errors.avatar}</FormErrorMessage>
-                </FormControl>
+                  <Field name="avatar">
+                    {({ field }) => 
+                      <FormControl isInvalid={formik.touched.avatar && !!formik.errors.avatar}>
+                        <InputGroup>
+                          <InputLeftElement>
+                            <ViewIcon />
+                          </InputLeftElement>
+                          <Input {...field} type="text" placeholder="Avatar" id="avatar" />
+                        </InputGroup>
+                        <FormErrorMessage>{formik.errors.avatar}</FormErrorMessage>
+                      </FormControl>}
+                  </Field>
 
-                <Button type="submit" colorScheme="blue" isLoading={loading}>Sign up</Button>
+                  <Button type="submit" colorScheme="blue" isLoading={loading}>Sign up</Button>
                 
-                <Text>Already have an account?&nbsp;
-                  <Link href="/login">
-                    <Clink color="blue.400">Login Now!</Clink>
-                  </Link>
-                </Text>
+                  <Text>Already have an account?&nbsp;
+                    <Link href="/login">
+                      <Clink color="blue.400">Login Now!</Clink>
+                    </Link>
+                  </Text>
 
-              </Stack>
-            </Form>}
+                </Stack>
+              </Form>}
           </Formik>
         </Box>
       </Flex>
-    </div>
+    </>
   );
 }
 

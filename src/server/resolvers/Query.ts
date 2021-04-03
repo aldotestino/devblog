@@ -1,7 +1,16 @@
 import { ResolverFunc } from '../../utils/types';
+import { UserQueryVariables } from '../../__generated__/UserQuery';
+import prisma from '../../lib/prisma';
 
-const hello: ResolverFunc<unknown, unknown> = () => 'Hello!';
+
+const user: ResolverFunc<unknown, UserQueryVariables> = (_, { username }) => {
+  return prisma.user.findUnique({
+    where: {
+      username
+    }
+  });
+};
 
 export {
-  hello
+  user
 };

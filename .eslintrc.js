@@ -22,6 +22,7 @@ module.exports = {
     '@typescript-eslint'
   ],
   'rules': {
+    'react/no-unescaped-entities': 0,
     '@typescript-eslint/no-non-null-assertion': 0,
     '@typescript-eslint/no-var-requires': 0,
     '@typescript-eslint/explicit-module-boundary-types': 0,

@@ -26,12 +26,19 @@ function Navbar() {
           </MenuButton>
           <MenuList>
             <MenuItem>
-              <Stack spacing="2" direction="row">
-                <Avatar src={user.avatar} name={[user.name, user.surname].join(' ')} />
-                <Text>Signed in as<br/>@{user.username}</Text>
-              </Stack>
+              <Link href={`/@${user.username}`}>
+                <Stack spacing="2" direction="row">
+                  <Avatar src={user.avatar} name={user.username} />
+                  <Text>Signed in as<br/>@{user.username}</Text>
+                </Stack>
+              </Link>
             </MenuItem>
             <MenuDivider />
+            <Link href="/posts/create">
+              <MenuItem>
+                New Post
+              </MenuItem>
+            </Link>
             <MenuItem onClick={logout}>Logout</MenuItem>
           </MenuList>
         </Menu>
