@@ -24,6 +24,7 @@ export interface UserQuery_user_posts {
   title: string;
   description: string;
   content: string;
+  createdAt: any | null;
   likes: UserQuery_user_posts_likes[];
 }
 

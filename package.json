@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "typegen": "npx apollo client:codegen --target typescript --endpoint=http://localhost:3000/api/graphql --outputFlat --includes \"pages/**\" --excludes \"src/__generated__\" src/__generated__",
+    "typegen": "npx apollo client:codegen --target typescript --endpoint=http://localhost:3000/api/graphql --outputFlat --includes \"pages/**\" src/__generated__",
     "migrate:dev": "npx prisma migrate dev --preview-feature",
     "migrate:deploy": "npx prisma migrate deploy --preview-feature",
     "generate": "npx prisma generate",
@@ -19,6 +19,7 @@
     "@emotion/styled": "^11.1.5",
     "@fortawesome/fontawesome-svg-core": "^1.2.35",
     "@fortawesome/free-brands-svg-icons": "^5.15.3",
+    "@fortawesome/free-regular-svg-icons": "^5.15.3",
     "@fortawesome/free-solid-svg-icons": "^5.15.3",
     "@fortawesome/react-fontawesome": "^0.1.14",
     "@prisma/client": "^2.20.1",

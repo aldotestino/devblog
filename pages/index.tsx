@@ -18,8 +18,8 @@ function Home() {
             Technology Blog
           </Heading>
           <Stack spacing="4" direction="row" mt="8" justify={['center', 'center', 'flex-start']}>
-            <Link href="/signup">
-              <Button colorScheme="blue" size="lg">
+            <Link href="/signup">         
+              <Button colorScheme="blue" size="lg">  
                 Sign up
               </Button>
             </Link>

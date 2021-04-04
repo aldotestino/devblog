@@ -27,8 +27,13 @@ const likes: ResolverFunc<Post, unknown> = ({ id } ) => {
   }).likes();
 };
 
+const createdAt: ResolverFunc<Post, unknown> = ({ createdAt }) => {
+  return createdAt.toISOString();
+};
+
 export {
   user,
   comments,
-  likes
+  likes,
+  createdAt
 };

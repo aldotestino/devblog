@@ -33,7 +33,7 @@ function validatePostVariables(values: PostMutationVariables): Partial<PostMutat
   return errors;
 }
 
-const initalValues = {
+const initialValues = {
   title: '',
   description: '',
   content: '',
@@ -73,7 +73,7 @@ function CreatePost() {
       <Box>
         <Heading mb="4" fontStyle="italic" textAlign={['center', 'center', 'left']}>Create New Post</Heading>
         <Formik
-          initialValues={initalValues}
+          initialValues={initialValues}
           validate={validatePostVariables}
           onSubmit={variables => {
             post({

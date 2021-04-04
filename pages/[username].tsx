@@ -26,6 +26,7 @@ const USER_QUERY = gql`
         title
         description
         content
+        createdAt
         likes {
           user {
             avatar
@@ -75,9 +76,9 @@ function UserProfile({ username } : UserPageProps) {
             <Stack spacing="4" mt="4" direction="row">
               <Link href="/posts/create">
                 <Button variant="outline" colorScheme="blue" leftIcon={<AddIcon />}>
-                New Post
+                  New Post        
                 </Button>
-              </Link>
+              </Link>       
               <Button variant="outline" colorScheme="blue" leftIcon={<EditIcon />}>
                 Update profile
               </Button>

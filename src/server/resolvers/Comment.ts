@@ -18,7 +18,12 @@ const user: ResolverFunc<Comment, unknown> = ({ id }) => {
   }).user();
 };
 
+const createdAt: ResolverFunc<Comment, unknown> = ({ createdAt }) => {
+  return createdAt.toISOString();
+};
+
 export {
   post,
-  user
+  user,
+  createdAt
 };

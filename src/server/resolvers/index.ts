@@ -3,7 +3,7 @@ import * as Mutation from './Mutation';
 import * as User from './User';
 import * as Post from './Post';
 import * as Like from './Like';
-import * as Comment from './Like';
+import * as Comment from './Comment';
 
 
 export const resolvers = {

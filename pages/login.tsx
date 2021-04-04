@@ -113,10 +113,12 @@ function Login() {
 
                   <Button type="submit" colorScheme="blue" isLoading={loading}>Login</Button>
 
-                  <Text>Don't have an account?&nbsp;
-                    <Link href="/signup">
-                      <Clink color="blue.400">Sign up Now!</Clink>
-                    </Link>
+                  <Text>Don't have an account?&nbsp;          
+                    <Clink color="blue.400">
+                      <Link href="/signup">
+                        Sign up Now!
+                      </Link>
+                    </Clink>              
                   </Text>
                 </Stack>
               </Form>}

@@ -161,12 +161,12 @@ function Signup() {
 
                   <Button type="submit" colorScheme="blue" isLoading={loading}>Sign up</Button>
                 
-                  <Text>Already have an account?&nbsp;
-                    <Link href="/login">
-                      <Clink color="blue.400">Login Now!</Clink>
-                    </Link>
+                  <Text>Already have an account?&nbsp;       
+                    <Clink color="blue.400">
+                      <Link href="/login">Login Now!
+                      </Link>
+                    </Clink>
                   </Text>
-
                 </Stack>
               </Form>}
           </Formik>

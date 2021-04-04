@@ -9,36 +9,37 @@ function Navbar() {
   const { user, isAuth, logout } = useAuth();
 
   return (
-    <Flex h={['16', '20']} px={['2', '16']} bg="whiteAlpha.700" style={{ backdropFilter: 'blur(4px)' }} align="center" position="sticky" top="0" zIndex="10" justify="space-between">
+    <Flex h={['16', '20']} px={['2', '4', '16']} bg="whiteAlpha.700" style={{ backdropFilter: 'blur(4px)' }} align="center" position="sticky" top="0" zIndex="10" justify="space-between">
       <Heading size="lg">
         <Link href="/">
           devBlog
         </Link>
       </Heading>
-      {!isAuth ? <Link href="/login">
-        <Button colorScheme="blue" variant="outline">
-          Login
-        </Button>
-      </Link> : 
+      {!isAuth ?
+        <Link href="/login">
+          <Button colorScheme="blue" variant="outline">      
+            Login
+          </Button>
+        </Link> : 
         <Menu>
           <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
           Account
           </MenuButton>
           <MenuList>
-            <MenuItem>
-              <Link href={`/@${user.username}`}>
+            <Link href={`/@${user.username}`}>
+              <MenuItem>       
                 <Stack spacing="2" direction="row">
                   <Avatar src={user.avatar} name={user.username} />
                   <Text>Signed in as<br/>@{user.username}</Text>
                 </Stack>
-              </Link>
-            </MenuItem>
-            <MenuDivider />
-            <Link href="/posts/create">
-              <MenuItem>
-                New Post
               </MenuItem>
             </Link>
+            <MenuDivider />
+            <MenuItem>
+              <Link href="/posts/create">
+                New Post
+              </Link>
+            </MenuItem>
             <MenuItem onClick={logout}>Logout</MenuItem>
           </MenuList>
         </Menu>

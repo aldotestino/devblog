@@ -6,6 +6,8 @@ import { LoginMutationVariables } from '../../__generated__/LoginMutation';
 import { SignupMutationVariables } from '../../__generated__/SignupMutation';
 import prisma from '../../lib/prisma';
 import { PostMutationVariables } from '../../__generated__/PostMutation';
+import { CommentMutationVariables } from '../../__generated__/CommentMutation';
+import { LikeMutationVariables } from '../../__generated__/LikeMutation';
 
 const signup: ResolverFunc<unknown, SignupMutationVariables> = async (_, { password, ...rest }) => {
   const hashedPassword = await bcrypt.hash(password, 10);
@@ -55,9 +57,51 @@ const post: ResolverFunc<unknown, PostMutationVariables> = (_, args, { userId })
   });
 };
 
+const comment: ResolverFunc<unknown, CommentMutationVariables> = (_, args, { userId }) => {
+  return prisma.comment.create({
+    data: {
+      ...args,
+      userId
+    }
+  });
+};
+
+const like: ResolverFunc<unknown, LikeMutationVariables> = async (_, { postId }, { userId }) => {
+  const alreadyLiked = await prisma.like.findUnique({
+    where: {
+      userId_postId: {
+        userId,
+        postId
+      }
+    }
+  });
+
+  if(alreadyLiked) {
+    await prisma.like.delete({
+      where: {
+        userId_postId: {
+          userId,
+          postId
+        }
+      }
+    });
+    return false;
+  }
+
+  await prisma.like.create({
+    data: {
+      userId,
+      postId
+    }
+  });
+  return true;
+};
+
 
 export {
   signup,
   login,
-  post
+  post,
+  comment,
+  like
 };
