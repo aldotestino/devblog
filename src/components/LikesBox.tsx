@@ -24,11 +24,11 @@ interface LikesBoxProps extends FlexProps {
 function LikesBox({ likes, ...props }: LikesBoxProps) {
   if(likes.length === 0) return null;
   return (
-    <Flex mt="2" {...props}>
+    <Flex {...props} mt="2" align="center">
       <AvatarGroup size="sm" max={2}>
         {likes.map((like, i) => <Avatar key={i} src={like.user.avatar} name={like.user.username} />)}
       </AvatarGroup>
-      <Text alignSelf="flex-end" ml="1">{getFormattedLikes(likes)}</Text>
+      <Text ml="1">{getFormattedLikes(likes)}</Text>
     </Flex>);
 }
 

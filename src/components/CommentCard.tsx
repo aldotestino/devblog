@@ -9,17 +9,17 @@ interface CommentCardProps {
 
 function CommentCard({ comment }: CommentCardProps) {
   return  (
-    <Box border="1px" borderColor="gray.300" rounded="lg" p="4" shadow="sm">
+    <Box border="1px" borderColor="inherit" rounded="lg" p="4" shadow="sm">
       <Flex align="center">
         <Avatar mr="4" src={comment.user.avatar} name={comment.user.username} size="md" />
         <Box>
           <Text fontSize="lg">
-            <CLink color="blue.300">
-              <Link href={`/@${comment.user.username}`}>
+            <Link href={`/@${comment.user.username}`}>
+              <CLink color="blue.400">            
                 {`@${comment.user.username}`}
-              </Link> 
-            </CLink>
-            {' '}
+              </CLink>
+            </Link>
+            <br/>
             {new Date(comment.createdAt).toLocaleDateString()}
           </Text>
         </Box>

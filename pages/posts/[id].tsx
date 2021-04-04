@@ -60,7 +60,7 @@ interface PostProps {
 function Post({ id }: PostProps) {
 
   const toast = useToast();
-  const { data: { post }, refetch } = useQuery<PostQuery, PostQueryVariables>(POST_QUERY, {
+  const { data: { post } } = useQuery<PostQuery, PostQueryVariables>(POST_QUERY, {
     variables: {
       id
     }
@@ -75,7 +75,7 @@ function Post({ id }: PostProps) {
     }
   });
 
-  async function handleLike() {
+  function handleLike() {
     if(!isAuth) {
       toast({
         title: 'An error occurred',
@@ -88,12 +88,11 @@ function Post({ id }: PostProps) {
       return;
     }
     setIsLiked(pL => !pL);
-    await like({
+    like({
       variables: {
         postId: id
       }
     });
-    refetch();
   }
 
   return (
@@ -106,11 +105,11 @@ function Post({ id }: PostProps) {
           <Box>
             <Text fontSize="xl">
                 By{' '}
-              <CLink color="blue.300">
-                <Link href={`/@${post.user.username}`}>
+              <Link href={`/@${post.user.username}`}>
+                <CLink color="blue.400">
                   {`@${post.user.username}`}
-                </Link> 
-              </CLink>
+                </CLink>
+              </Link> 
             </Text>
             <Text>Posted on {new Date(post.createdAt).toLocaleDateString()}</Text>
           </Box>

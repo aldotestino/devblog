@@ -92,7 +92,7 @@ function Login() {
                           <InputLeftElement >
                             <AtSignIcon />
                           </InputLeftElement>
-                          <Input {...field} type="text" placeholder="Username" />
+                          <Input {...field} type="text" placeholder="Username" id="username" />
                         </InputGroup>
                         <FormErrorMessage>{formik.errors.username}</FormErrorMessage>
                       </FormControl>}
@@ -105,7 +105,7 @@ function Login() {
                           <InputLeftElement>
                             <LockIcon />
                           </InputLeftElement>
-                          <Input {...field} type="password" placeholder="Password" />
+                          <Input {...field} type="password" placeholder="Password" id="password" />
                         </InputGroup>
                         <FormErrorMessage>{formik.errors.password}</FormErrorMessage>
                       </FormControl>}
@@ -114,11 +114,11 @@ function Login() {
                   <Button type="submit" colorScheme="blue" isLoading={loading}>Login</Button>
 
                   <Text>Don't have an account?&nbsp;          
-                    <Clink color="blue.400">
-                      <Link href="/signup">
+                    <Link href="/signup">
+                      <Clink color="blue.400"> 
                         Sign up Now!
-                      </Link>
-                    </Clink>              
+                      </Clink>
+                    </Link>           
                   </Text>
                 </Stack>
               </Form>}
