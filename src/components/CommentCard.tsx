@@ -14,7 +14,7 @@ function CommentCard({ comment }: CommentCardProps) {
         <Avatar mr="4" src={comment.user.avatar} name={comment.user.username} size="md" />
         <Box>
           <Text fontSize="lg">
-            <Link href={`/@${comment.user.username}`}>
+            <Link href={`/@${comment.user.username}`} passHref>
               <CLink color="blue.400">            
                 {`@${comment.user.username}`}
               </CLink>

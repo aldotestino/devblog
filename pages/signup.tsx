@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { Stack, FormControl, InputGroup, InputLeftElement, Input, FormErrorMessage, Text, Button, Flex, Box, Heading, Link as Clink, useToast } from '@chakra-ui/react';
+import { Stack, FormControl, InputGroup, InputLeftElement, Input, FormErrorMessage, Text, Button, Flex, Box, Heading, Link as CLink, useToast } from '@chakra-ui/react';
 import { LockIcon, ViewIcon, EmailIcon, AtSignIcon } from '@chakra-ui/icons';
 import { Formik, Form, Field } from 'formik';
 import { validateSignupVariables } from '../src/utils/authHelpers';
@@ -79,6 +79,7 @@ function Signup() {
           <Formik
             initialValues={initialValues}
             validate={validateSignupVariables}
+            validateOnBlur={false}
             onSubmit={variables => {
               signup({
                 variables
@@ -162,10 +163,10 @@ function Signup() {
                   <Button type="submit" colorScheme="blue" isLoading={loading}>Sign up</Button>
                 
                   <Text>Already have an account?&nbsp;
-                    <Link href="/login">     
-                      <Clink color="blue.400">
+                    <Link href="/login" passHref>     
+                      <CLink color="blue.400">
                       Login Now!
-                      </Clink>
+                      </CLink>
                     </Link>
                   </Text>
                 </Stack>

@@ -1,15 +1,17 @@
-import { Flex, Heading, LinkBox, LinkOverlay, Text } from '@chakra-ui/react';
+import { Avatar, Flex, Heading, LinkBox, LinkOverlay, Stack, Text, Link as CLink, Box } from '@chakra-ui/react';
 import { ArrowForwardIcon } from '@chakra-ui/icons';
 import Link from 'next/link';
 import React from 'react';
 import { UserQuery_user_posts } from '../__generated__/UserQuery';
 import LikesBox from './LikesBox';
+import { FeedQuery_feed, FeedQuery_feed_user } from '../__generated__/FeedQuery';
 
 interface PostCardProps {
-  post: UserQuery_user_posts
+  post: UserQuery_user_posts | FeedQuery_feed
+  user?: FeedQuery_feed_user
 }
 
-function PostCard({ post }: PostCardProps) {
+function PostCard({ post, user }: PostCardProps) {
   return (
     <LinkBox cursor="pointer" border="1px" transition="all .2s ease" _hover={{ transform: 'scale(1.01)', borderColor: 'blue.400' }} borderColor="inherit" rounded="lg" p="4" shadow="sm">
       <Flex align="center">
@@ -23,7 +25,22 @@ function PostCard({ post }: PostCardProps) {
         <ArrowForwardIcon color="blue.400" ml="4" w="6" h="6" />
       </Flex>
       <Text mt="2" fontSize="xl">{post.description}</Text>
-      <Text>Posted on {new Date(post.createdAt).toLocaleDateString()}</Text>
+      {user && 
+        <Stack spacing="2" mt="2" direction="row" align="center">
+          <Avatar src={user.avatar} size="md" name={user.username} />
+          <Box>
+            <Text fontSize="xl">
+              By{' '}
+              <Link href={`/@${user.username}`} passHref>
+                <CLink color="blue.400">
+                  {`@${user.username}`}
+                </CLink>
+              </Link>
+            </Text>
+            <Text fontSize="base">Posted on {new Date(post.createdAt).toLocaleDateString()}</Text>
+          </Box>
+        </Stack>}
+      {!user && <Text>Posted on {new Date(post.createdAt).toLocaleDateString()}</Text>}
       <LikesBox likes={post.likes} />
     </LinkBox>
   );

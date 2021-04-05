@@ -74,6 +74,7 @@ function CreatePost() {
         <Heading mb="4" fontStyle="italic" textAlign={['center', 'center', 'left']}>Create New Post</Heading>
         <Formik
           initialValues={initialValues}
+          validateOnBlur={false}
           validate={validatePostVariables}
           onSubmit={variables => {
             post({
@@ -82,7 +83,7 @@ function CreatePost() {
           }}
         >
           {formik => 
-            <Form>
+            <Form onClick={() => console.log(formik)}>
               <Flex direction={['column', 'column', 'row']} align={['center', 'center', 'flex-start']}>
                 <Stack spacing="4" w={['xs', 'md', 'md']} mr={['0', '0', '4']}>
                   <Field name="title">
@@ -95,7 +96,7 @@ function CreatePost() {
                   </Field>
 
                   <Field name="description">
-                    {({ field }) => 
+                    {({ field, }) => 
                       <FormControl isInvalid={formik.touched.description && !!formik.errors.description} >
                         <FormLabel>Description</FormLabel>  
                         <Input {...field} type="text" placeholder="Description" id="description" />
@@ -103,12 +104,23 @@ function CreatePost() {
                       </FormControl>}
                   </Field>
 
+                  <Box display={['block', 'block', 'none']}>
+                    <Field name="content">
+                      {({ field }) => 
+                        <FormControl isInvalid={formik.touched.content && !!formik.errors.content}>
+                          <FormLabel>Content</FormLabel>  
+                          <Textarea {...field} type="text" placeholder="Content" id="content" />
+                          <FormErrorMessage>{formik.errors.content}</FormErrorMessage>
+                        </FormControl>}
+                    </Field>
+                  </Box>
+
                   <Button type="submit" colorScheme="blue" isLoading={loading}>
                     Submit
                   </Button>
                 </Stack>
 
-                <Box flex="1" mt={['4', '4', '0']} w={['xs', 'md', 'full']}>
+                <Box flex="1" mt={['4', '4', '0']} display={['none', 'none', 'block']} w={['xs', 'md', 'full']}>
                   <Field name="content">
                     {({ field }) => 
                       <FormControl isInvalid={formik.touched.content && !!formik.errors.content}>

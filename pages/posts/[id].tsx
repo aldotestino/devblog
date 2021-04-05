@@ -5,13 +5,13 @@ import { Avatar, Box, Flex, Heading, Text, Link as CLink, Stack, useToast } from
 import { initializeApollo } from '../../src/utils/apolloConfig';
 import { PostQuery, PostQueryVariables } from '../../src/__generated__/PostQuery';
 import Link from 'next/link';
-import CommentBox from '../../src/components/CommentBox';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHeart as BorderHeart } from '@fortawesome/free-regular-svg-icons';
-import { faHeart as FullHeart } from '@fortawesome/free-solid-svg-icons';
+import CommentBox from '../../src/components/CommentsBox';
+import { HeartIcon as FullHeart } from '@heroicons/react/solid';
+import { HeartIcon as OutlineHeart } from '@heroicons/react/outline';
 import { useAuth } from '../../src/store/User';
 import { LikeMutation, LikeMutationVariables } from '../../src/__generated__/LikeMutation';
 import LikesBox from '../../src/components/LikesBox';
+import Head from 'next/head';
 
 const POST_QUERY = gql` 
   query PostQuery($id: ID!) {
@@ -75,6 +75,8 @@ function Post({ id }: PostProps) {
     }
   });
 
+  const LikeButton = isLiked ? FullHeart : OutlineHeart;
+
   function handleLike() {
     if(!isAuth) {
       toast({
@@ -96,36 +98,53 @@ function Post({ id }: PostProps) {
   }
 
   return (
-    <Stack spacing="10" direction={['column', 'column', 'row']}>
-      <Box w={['full', 'full', 'lg']}>
-        <Heading fontStyle="italic">{post.title}</Heading>
-        <Text fontSize="2xl">{post.description}</Text>
-        <Flex mt="4" align="center">
-          <Avatar mr="4" src={post.user.avatar} name={post.user.username} size="lg" />
-          <Box>
-            <Text fontSize="xl">
+    <>
+      <Head>
+        <title>devBlog - @{post.user.username}/{post.title}</title>
+      </Head>
+
+      <Stack spacing={['4', '4', '10']} direction={['column', 'column', 'row']}>
+        <Box w={['full', 'full', 'lg']}>
+          <Heading fontStyle="italic">{post.title}</Heading>
+          <Text fontSize="2xl">{post.description}</Text>
+          <Flex mt="4" align="center">
+            <Avatar mr="4" src={post.user.avatar} name={post.user.username} size="lg" />
+            <Box>
+              <Text fontSize="xl">
                 By{' '}
-              <Link href={`/@${post.user.username}`}>
-                <CLink color="blue.400">
-                  {`@${post.user.username}`}
-                </CLink>
-              </Link> 
-            </Text>
-            <Text>Posted on {new Date(post.createdAt).toLocaleDateString()}</Text>
+                <Link href={`/@${post.user.username}`} passHref>
+                  <CLink color="blue.400">
+                    {`@${post.user.username}`}
+                  </CLink>
+                </Link> 
+              </Text>
+              <Text>Posted on {new Date(post.createdAt).toLocaleDateString()}</Text>
+            </Box>
+          </Flex>
+          {/* LIKES AND COMMENTS FOR DESKTOP */}
+          <Box display={['none', 'none', 'block']}>
+            <Flex mt="4" align="center">
+              <LikeButton style={{ width: '40px', height: '40px', color: isLiked ? '#F56565' : '#A0AEC0', cursor: 'pointer' }} onClick={handleLike} />
+              <LikesBox ml="2" likes={post.likes} />
+            </Flex>
+            <CommentBox comments={post.comments} postId={post.id} />
           </Box>
-        </Flex>
-        <Flex mt="4" align="center">
-          <FontAwesomeIcon cursor="pointer" onClick={handleLike} size="2x" color={isLiked ? '#FC8181' : '#CBD5E0'} icon={isLiked ? FullHeart : BorderHeart} />
-          <LikesBox ml="2" likes={post.likes} />
-        </Flex>
-        <CommentBox comments={post.comments} postId={post.id} />
-      </Box>
-      <Box flex="1">
-        <Text fontSize="2xl">
-          {post.content}
-        </Text>
-      </Box>
-    </Stack>
+        </Box>
+        <Box flex="1">
+          <Text fontSize="2xl" bg="gray.200" color="black" p="4" rounded="lg">
+            {post.content}
+          </Text>
+        </Box>
+        {/* LIKES AND COMMENTS FOR MOBILE */}
+        <Box display={['block', 'block', 'none']}>
+          <Flex mt="4" align="center">
+            <LikeButton style={{ width: '40px', height: '40px', color: isLiked ? '#F56565' : '#A0AEC0', cursor: 'pointer' }} onClick={handleLike} />
+            <LikesBox ml="2" likes={post.likes} />
+          </Flex>
+          <CommentBox comments={post.comments} postId={post.id} />
+        </Box>
+      </Stack>
+    </>
   );
 }
 

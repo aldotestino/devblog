@@ -1,6 +1,7 @@
 import Head from 'next/head';
 import Link from 'next/link';
-import { Flex, Heading, Box, Stack, Button, Img } from '@chakra-ui/react';
+import { Flex, Heading, Box, Stack, Button, Img, LinkOverlay } from '@chakra-ui/react';
+import React from 'react';
 
 function Home() {
   return (
@@ -12,19 +13,19 @@ function Home() {
 
       <Flex justify="space-between" direction={['column', 'column', 'row']}>
         <Box textAlign={['center', 'center', 'left']}>
-          <Heading fontSize="6xl" bgGradient="linear(to-l, #DB00FF, #00A3FF)" bgClip="text">
-            Enter in The Biggest
-            <br/>
-            Technology Blog
+          <Heading fontSize="6xl" bgGradient="linear(to-l, #7928CA,#FF0080)" bgClip="text">
+            The Blog for Developers
           </Heading>
-          <Stack spacing="4" direction="row" mt="8" justify={['center', 'center', 'flex-start']}>
-            <Link href="/signup">         
-              <Button colorScheme="blue" size="lg">  
-                Sign up
-              </Button>
-            </Link>
-            <Button size="lg">
-              Recent Posts
+          <Stack spacing="4" direction="row" mt="8" justify={['center', 'center', 'flex-start']}>            
+            <Button colorScheme="blue" size="lg">
+              <Link href="/signup" passHref>
+                <LinkOverlay>
+                  Sign up
+                </LinkOverlay>
+              </Link>
+            </Button>      
+            <Button as="a" target="blank" href="https://github.com/aldotestino/devblog" size="lg">
+              Follow on GitHub
             </Button>
           </Stack>
         </Box>

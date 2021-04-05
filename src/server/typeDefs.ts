@@ -46,11 +46,13 @@ export const typeDefs = gql`
   type Query {
     user(username: String!): User
     post(id: ID!): Post
+    feed: [Post!]!
   }
 
   type Mutation {
     signup(name: String!, surname: String!, email: String!, username: String! password: String!, avatar: String): Boolean!
     login(username: String!, password: String!): AuthPayload
+    updateProfile(name: String!, surname: String!, username: String!, avatar: String): User
     post(title: String!, description: String!, content: String!): Post!
     comment(content: String!, postId: ID!): Comment!
     like(postId: ID!): Boolean!

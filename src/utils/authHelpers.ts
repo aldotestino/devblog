@@ -2,6 +2,7 @@ import { Request } from 'express';
 import jwt from 'jsonwebtoken';
 import { SignupMutationVariables } from '../__generated__/SignupMutation';
 import { LoginMutationVariables } from '../__generated__/LoginMutation';
+import { UpdateProfileMutationVariables } from '../__generated__/UpdateProfileMutation';
 
 export const JWT_SECRET = 'devBlog2021';
 
@@ -61,6 +62,34 @@ export function validateLoginVariables(values: LoginMutationVariables): Partial<
     errors.password = 'Campo obbligatorio';
   } else if (values.password.length < 5) {
     errors.password = 'Deve contenere almeno 5 caratteri';
+  }
+
+  return errors;
+}
+
+export function validateUpdateProfileVariables(values: UpdateProfileMutationVariables): Partial<UpdateProfileMutationVariables> {
+  const errors: Partial<UpdateProfileMutationVariables> = {}; 
+
+  if (!values.username) {
+    errors.username = 'Campo obbligatorio';
+  } else if (values.username.length < 2) {
+    errors.username = 'Deve contenere almeno 3 caratteri';
+  }
+
+  if (!values.name) {
+    errors.name = 'Campo obbligatorio';
+  } else if (values.name.length < 2) {
+    errors.name = 'Deve contenere almeno 3 caratteri';
+  }
+
+  if (!values.surname) {
+    errors.surname = 'Campo obbligatorio';
+  } else if (values.surname.length < 2) {
+    errors.surname = 'Deve contenere almeno 3 caratteri';
+  }
+
+  if(values.avatar && !URL_REGEX.test(values.avatar) && values.avatar !== '') {
+    errors.avatar = 'Url invalido';
   }
 
   return errors;
