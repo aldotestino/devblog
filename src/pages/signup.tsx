@@ -1,13 +1,13 @@
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { Stack, FormControl, InputGroup, InputLeftElement, Input, FormErrorMessage, Text, Button, Flex, Box, Heading, Link as CLink, useToast } from '@chakra-ui/react';
+import { Stack, FormControl, InputGroup, InputLeftElement, Input, FormErrorMessage, Text, Button, Flex, Box, Heading, Link as CLink, useToast, useColorModeValue } from '@chakra-ui/react';
 import { LockIcon, ViewIcon, EmailIcon, AtSignIcon } from '@chakra-ui/icons';
 import { Formik, Form, Field } from 'formik';
-import { validateSignupVariables } from '../src/utils/authHelpers';
+import { validateSignupVariables } from '../utils/authHelpers';
 import { gql, useMutation } from '@apollo/client';
-import { SignupMutationVariables, SignupMutation } from '../src/__generated__/SignupMutation';
-import { useAuth } from '../src/store/User';
+import { SignupMutationVariables, SignupMutation } from '../__generated__/SignupMutation';
+import { useAuth } from '../store/User';
 import { useEffect } from 'react';
 
 const SIGNUP_MUTATION = gql`
@@ -56,6 +56,8 @@ function Signup() {
     }
   });
 
+  const bgColor = useColorModeValue('white', 'gray.700');
+
   useEffect(() => {
     if(isAuth) {
       router.push('/');
@@ -70,9 +72,9 @@ function Signup() {
       </Head>
 
       <Flex align="center" direction="column">
-        <Box>
+        <Box w={['xs', 'md']} border="1px" bg={bgColor} transition="background-color .2s ease" borderColor="inherit" rounded="lg" p="8">
           
-          <Heading mb="4" fontStyle="italic" textAlign="center">
+          <Heading mb="6" fontStyle="italic">
             Sign up
           </Heading>
           
@@ -88,8 +90,7 @@ function Signup() {
           >
             {formik => 
               <Form>
-                <Stack spacing="4" w="xs">
-
+                <Stack spacing="6">
                   <Stack direction="row" spacing="4">
                     <Field name="name">
                       {({ field }) => 

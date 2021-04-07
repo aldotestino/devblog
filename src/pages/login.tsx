@@ -2,13 +2,13 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
-import { Stack, FormControl, InputGroup, InputLeftElement, Input, FormErrorMessage, Text, Button, Flex, Box, Heading, Link as CLink, useToast } from '@chakra-ui/react';
+import { Stack, FormControl, InputGroup, InputLeftElement, Input, FormErrorMessage, Text, Button, Flex, Box, Heading, Link as CLink, useToast, useColorModeValue } from '@chakra-ui/react';
 import { LockIcon, AtSignIcon } from '@chakra-ui/icons';
 import { Formik, Form, Field } from 'formik';
-import { validateLoginVariables } from '../src/utils/authHelpers';
-import { useAuth } from '../src/store/User';
+import { validateLoginVariables } from '../utils/authHelpers';
+import { useAuth } from '../store/User';
 import { gql, useMutation } from '@apollo/client';
-import { LoginMutation, LoginMutationVariables } from '../src/__generated__/LoginMutation';
+import { LoginMutation, LoginMutationVariables } from '../__generated__/LoginMutation';
 
 const LOGIN_MUTATION = gql`
   mutation LoginMutation($username: String!, $password: String!) {
@@ -56,6 +56,8 @@ function Login() {
     }
   });
 
+  const bgColor = useColorModeValue('white', 'gray.700');
+
   useEffect(() => {
     if(isAuth) {
       router.push('/');
@@ -70,8 +72,8 @@ function Login() {
       </Head>
 
       <Flex align="center" direction="column">
-        <Box>
-          <Heading mb="4" fontStyle="italic" textAlign="center">Login</Heading>
+        <Box border="1px" w={['xs', 'md']} borderColor="inherit" transition="background-color .2s ease" bg={bgColor} rounded="lg" p="8">
+          <Heading mb="6" fontStyle="italic">Login</Heading>
           <Formik
             initialValues={initialValues}
             validateOnBlur={false}
@@ -84,7 +86,7 @@ function Login() {
           >
             {formik => 
               <Form>
-                <Stack spacing="4" w="xs">
+                <Stack spacing="6">
 
                   <Field name="username">
                     {({ field }) => 

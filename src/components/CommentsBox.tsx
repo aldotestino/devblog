@@ -31,7 +31,7 @@ function CommentBox({ postId, comments }: CommentBoxProps) {
   const { isAuth, user } = useAuth();
   const [updatedComments, setUpdatedComments] = useState<PostQuery_post_comments[]>(comments);
   const toast = useToast();
-  
+
   const [comment, { loading }] = useMutation<CommentMutation, CommentMutationVariables>(COMMENT_MUTATION, {
     context: {
       headers: {
@@ -51,7 +51,10 @@ function CommentBox({ postId, comments }: CommentBoxProps) {
       setUpdatedComments(prevComments => [newComment, ...prevComments]);
     }
   });
-  
+
+  function removeFromUI(commentId: string) {
+    setUpdatedComments(prevComments => prevComments.filter(({ id }) => id !== commentId));
+  }
 
   return(
     <Box mt="4">
@@ -71,7 +74,7 @@ function CommentBox({ postId, comments }: CommentBoxProps) {
           }
           comment({
             variables: {
-              ...variables,
+              content: variables.content.trim(),
               postId
             }
           });
@@ -82,20 +85,20 @@ function CommentBox({ postId, comments }: CommentBoxProps) {
           <Form>
             <Field name="content">
               {({ field }) => 
-                <FormControl isInvalid={formik.touched.content && !!formik.errors.content}>
-                  <Textarea {...field} type="text" placeholder="Comment this post here" id="content" />
+                <FormControl isDisabled={!isAuth} isInvalid={formik.touched.content && !!formik.errors.content}>
+                  <Textarea {...field} type="text" placeholder={!isAuth ? 'Login to comment' : 'Comment this post'} id="content" />
                   <FormErrorMessage>{formik.errors.content}</FormErrorMessage>
                 </FormControl>}
             </Field>
             <Flex justify="flex-end">
-              <Button type="submit" colorScheme="blue" isLoading={loading}>
+              <Button type="submit" isDisabled={!isAuth || formik.values.content.trim() === ''} colorScheme="blue" isLoading={loading}>
               Submit
               </Button>
             </Flex>
           </Form>}
       </Formik>
       <Stack mt="4" spacing="4">
-        {updatedComments.map(c => <CommentCard comment={c} key={c.id} />)}
+        {updatedComments.map(c => <CommentCard removeFromUI={removeFromUI} comment={c} key={c.id} />)}
       </Stack>
     </Box>
   );

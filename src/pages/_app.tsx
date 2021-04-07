@@ -1,8 +1,8 @@
 import { ChakraProvider } from '@chakra-ui/react';
 import { ApolloProvider } from '@apollo/client';
-import { useApollo } from '../src/utils/apolloConfig';
-import Layout from '../src/components/Layout';
-import { AuthProvider } from '../src/store/User';
+import { useApollo } from '../utils/apolloConfig';
+import Layout from '../components/Layout';
+import { AuthProvider } from '../store/User';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 import NProgress from 'nprogress';

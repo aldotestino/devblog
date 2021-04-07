@@ -1,4 +1,4 @@
-import { Avatar, Flex, Heading, LinkBox, LinkOverlay, Stack, Text, Link as CLink, Box } from '@chakra-ui/react';
+import { Avatar, Flex, Heading, LinkBox, LinkOverlay, Stack, Text, Link as CLink, Box, useColorModeValue } from '@chakra-ui/react';
 import { ArrowForwardIcon } from '@chakra-ui/icons';
 import Link from 'next/link';
 import React from 'react';
@@ -12,8 +12,11 @@ interface PostCardProps {
 }
 
 function PostCard({ post, user }: PostCardProps) {
+
+  const bgColor = useColorModeValue('white', 'gray.700');
+
   return (
-    <LinkBox cursor="pointer" border="1px" transition="all .2s ease" _hover={{ transform: 'scale(1.01)', borderColor: 'blue.400' }} borderColor="inherit" rounded="lg" p="4" shadow="sm">
+    <LinkBox cursor="pointer" border="1px" transition="all .2s ease" _hover={{ transform: 'scale(1.01)', borderColor: 'blue.400' }} bgColor={bgColor} borderColor="inherit" rounded="lg" p="4" shadow="md">
       <Flex align="center">
         <Heading size="lg">
           <Link href={`/posts/${post.id}`} passHref>

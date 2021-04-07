@@ -9,6 +9,8 @@ import { PostMutationVariables } from '../../__generated__/PostMutation';
 import { CommentMutationVariables } from '../../__generated__/CommentMutation';
 import { LikeMutationVariables } from '../../__generated__/LikeMutation';
 import { UpdateProfileMutationVariables } from '../../__generated__/UpdateProfileMutation';
+import { DeletePostMutationVariables } from '../../__generated__/DeletePostMutation';
+import { DeleteCommentMutationVariables } from '../../__generated__/DeleteCommentMutation';
 
 const signup: ResolverFunc<unknown, SignupMutationVariables> = async (_, { password, ...rest }) => {
   const hashedPassword = await bcrypt.hash(password, 10);
@@ -107,11 +109,53 @@ const like: ResolverFunc<unknown, LikeMutationVariables> = async (_, { postId },
   return true;
 };
 
+const deletePost: ResolverFunc<unknown, DeletePostMutationVariables> = async (_, { postId }, { userId }) => {
+  const postToDelete = await prisma.post.findUnique({
+    where: {
+      id: postId
+    }
+  });
+
+  if(postToDelete.userId !== userId) {
+    throw new Error('Cannot delete post');
+  }
+
+  // Executing a raw sql command
+  // prisma cannot delete on cascade for now
+  await prisma.$executeRaw`
+    DELETE FROM Post WHERE id=${postId};
+  `;
+
+  return true;
+};
+
+const deleteComment: ResolverFunc<unknown, DeleteCommentMutationVariables> = async (_, { commentId }, { userId }) => {
+  const commentToDelete = await prisma.comment.findUnique({
+    where: {
+      id: commentId
+    }
+  });
+
+  if(commentToDelete.userId !== userId) {
+    throw new Error('Cannot delete comment');
+  }
+
+  await prisma.comment.delete({
+    where: {
+      id: commentId
+    }
+  });
+
+  return true;
+};
+
 export {
   signup,
   login,
   updateProfile,
   post,
   comment,
-  like
+  like,
+  deletePost,
+  deleteComment
 };

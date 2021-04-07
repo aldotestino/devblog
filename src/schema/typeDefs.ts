@@ -56,6 +56,8 @@ export const typeDefs = gql`
     post(title: String!, description: String!, content: String!): Post!
     comment(content: String!, postId: ID!): Comment!
     like(postId: ID!): Boolean!
+    deletePost(postId: ID!): Boolean!
+    deleteComment(commentId: ID!): Boolean!
   }
 
   scalar DateTime

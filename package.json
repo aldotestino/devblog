@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "typegen": "npx apollo client:codegen --target typescript --endpoint=http://localhost:3000/api/graphql --outputFlat --includes \"pages/**\" src/__generated__",
+    "typegen": "npx apollo client:codegen --target typescript --endpoint=http://localhost:3000/api/graphql --outputFlat --includes \"src/**\" --excludes \"src/schema/**\" src/__generated__",
     "migrate:dev": "npx prisma migrate dev --preview-feature",
     "migrate:deploy": "npx prisma migrate deploy --preview-feature",
     "generate": "npx prisma generate",

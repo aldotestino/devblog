@@ -3,9 +3,9 @@ import { Heading, SimpleGrid } from '@chakra-ui/react';
 import { GetServerSideProps } from 'next';
 import Head from 'next/head';
 import React from 'react';
-import PostCard from '../../src/components/PostCard';
-import { initializeApollo } from '../../src/utils/apolloConfig';
-import { FeedQuery } from '../../src/__generated__/FeedQuery';
+import PostCard from '../../components/PostCard';
+import { initializeApollo } from '../../utils/apolloConfig';
+import { FeedQuery } from '../../__generated__/FeedQuery';
 
 const FEED_QUERY = gql`
   query FeedQuery {

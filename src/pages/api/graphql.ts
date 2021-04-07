@@ -1,6 +1,6 @@
 import { ApolloServer } from 'apollo-server-micro';
-import { schema } from '../../src/server/schema';
-import { getUserId } from '../../src/utils/authHelpers';
+import { schema } from '../../schema';
+import { getUserId } from '../../utils/authHelpers';
 
 const apolloServer = new ApolloServer({ 
   schema,

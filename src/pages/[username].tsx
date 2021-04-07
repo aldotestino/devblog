@@ -1,17 +1,17 @@
 import { useQuery, gql, useMutation } from '@apollo/client';
 import { AddIcon, EditIcon } from '@chakra-ui/icons';
-import { Avatar, Box, Button, Flex, Heading, Stack, Text, toast, useDisclosure, useToast } from '@chakra-ui/react';
+import { Avatar, Box, Button, Flex, Heading, Stack, Text, useDisclosure, useToast } from '@chakra-ui/react';
 import { GetServerSideProps } from 'next';
 import Head from 'next/head';
 import Link from 'next/link';
 import React, { useMemo } from 'react';
-import PostCard from '../src/components/PostCard';
-import UpdateProfileModal from '../src/components/UpdateProfileModal';
+import PostCard from '../components/PostCard';
+import UpdateProfileModal from '../components/UpdateProfileModal';
 import { InboxIcon } from '@heroicons/react/outline';
-import { useAuth } from '../src/store/User';
-import { initializeApollo } from '../src/utils/apolloConfig';
-import { UserQuery, UserQueryVariables } from '../src/__generated__/UserQuery';
-import { UpdateProfileMutation, UpdateProfileMutationVariables } from '../src/__generated__/UpdateProfileMutation';
+import { useAuth } from '../store/User';
+import { initializeApollo } from '../utils/apolloConfig';
+import { UserQuery, UserQueryVariables } from '../__generated__/UserQuery';
+import { UpdateProfileMutation, UpdateProfileMutationVariables } from '../__generated__/UpdateProfileMutation';
 import { useRouter } from 'next/router';
 
 const USER_QUERY = gql`
@@ -88,7 +88,7 @@ function UserProfile({ username } : UserPageProps) {
         router.replace(`/@${username}`);
       }
     },
-    onError: (e) => {
+    onError: () => {
       toast({
         title: 'An error occurred',
         description: 'This username is already in use',
@@ -132,8 +132,8 @@ function UserProfile({ username } : UserPageProps) {
           </Flex>
           {isMe && 
             <Stack spacing="4" mt="4" direction="row">
-              <Link href="/posts/create">
-                <Button variant="outline" colorScheme="blue" leftIcon={<AddIcon />}>
+              <Link href="/posts/create" passHref>
+                <Button variant="outline" as="a" colorScheme="blue" leftIcon={<AddIcon />}>
                   New Post        
                 </Button>
               </Link>       

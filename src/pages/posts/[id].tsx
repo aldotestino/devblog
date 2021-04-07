@@ -1,17 +1,20 @@
 import { gql, useMutation, useQuery } from '@apollo/client';
 import { GetServerSideProps } from 'next';
-import React, { useState } from 'react';
-import { Avatar, Box, Flex, Heading, Text, Link as CLink, Stack, useToast } from '@chakra-ui/react';
-import { initializeApollo } from '../../src/utils/apolloConfig';
-import { PostQuery, PostQueryVariables } from '../../src/__generated__/PostQuery';
+import React, { useMemo, useState } from 'react';
+import { DeleteIcon, EditIcon, LinkIcon } from '@chakra-ui/icons';
+import { Avatar, Box, Flex, Heading, Text, Link as CLink, Stack, useToast, useBreakpointValue, Menu, MenuButton, MenuList, MenuItem, IconButton, Icon } from '@chakra-ui/react';
+import { initializeApollo } from '../../utils/apolloConfig';
+import { PostQuery, PostQueryVariables } from '../../__generated__/PostQuery';
 import Link from 'next/link';
-import CommentBox from '../../src/components/CommentsBox';
-import { HeartIcon as FullHeart } from '@heroicons/react/solid';
+import CommentBox from '../../components/CommentsBox';
+import { HeartIcon as FullHeart, DotsVerticalIcon } from '@heroicons/react/solid';
 import { HeartIcon as OutlineHeart } from '@heroicons/react/outline';
-import { useAuth } from '../../src/store/User';
-import { LikeMutation, LikeMutationVariables } from '../../src/__generated__/LikeMutation';
-import LikesBox from '../../src/components/LikesBox';
+import { useAuth } from '../../store/User';
+import { LikeMutation, LikeMutationVariables } from '../../__generated__/LikeMutation';
+import LikesBox from '../../components/LikesBox';
 import Head from 'next/head';
+import { DeletePostMutation, DeletePostMutationVariables } from '../../__generated__/DeletePostMutation';
+import { useRouter } from 'next/router';
 
 const POST_QUERY = gql` 
   query PostQuery($id: ID!) {
@@ -47,6 +50,12 @@ const POST_QUERY = gql`
   }
 `;
 
+const DELETE_POST_MUTATION = gql`
+  mutation DeletePostMutation($postId: ID!) {
+    deletePost(postId: $postId)
+  }
+`;
+
 const LIKE_MUTATION = gql`
   mutation LikeMutation($postId: ID!) {
     like(postId: $postId)
@@ -75,6 +84,26 @@ function Post({ id }: PostProps) {
     }
   });
 
+  const router = useRouter();
+
+  const [deletePost] = useMutation<DeletePostMutation, DeletePostMutationVariables>(DELETE_POST_MUTATION, {
+    context: {
+      headers: {
+        authorization: user?.token
+      }
+    },
+    variables: {
+      postId: post.id
+    },
+    onCompleted: ({ deletePost }) => {
+      if(deletePost) {
+        router.push(`/@${user.username}`);
+      }
+    }
+  });
+  
+  const isMe = useMemo(() => isAuth && user.id === post.user.id, [post, user]);
+  const isMobile = useBreakpointValue({ base: true, md: false });
   const LikeButton = isLiked ? FullHeart : OutlineHeart;
 
   function handleLike() {
@@ -107,42 +136,59 @@ function Post({ id }: PostProps) {
         <Box w={['full', 'full', 'lg']}>
           <Heading fontStyle="italic">{post.title}</Heading>
           <Text fontSize="2xl">{post.description}</Text>
-          <Flex mt="4" align="center">
-            <Avatar mr="4" src={post.user.avatar} name={post.user.username} size="lg" />
-            <Box>
-              <Text fontSize="xl">
+          <Flex mt="4" align="flex-start" justify="space-between">
+            <Flex align="center">
+              <Avatar mr="4" src={post.user.avatar} name={post.user.username} size="lg" />
+              <Box>
+                <Text fontSize="xl">
                 By{' '}
-                <Link href={`/@${post.user.username}`} passHref>
-                  <CLink color="blue.400">
-                    {`@${post.user.username}`}
-                  </CLink>
-                </Link> 
-              </Text>
-              <Text>Posted on {new Date(post.createdAt).toLocaleDateString()}</Text>
-            </Box>
+                  <Link href={`/@${post.user.username}`} passHref>
+                    <CLink color="blue.400">
+                      {`@${post.user.username}`}
+                    </CLink>
+                  </Link> 
+                </Text>
+                <Text>Posted on {new Date(post.createdAt).toLocaleDateString()}</Text>
+              </Box>
+            </Flex>
+            <Menu>
+              <MenuButton as={IconButton} rounded="full" variant="ghost" icon={<Icon w={6} h={6} as={DotsVerticalIcon} />} />
+              <MenuList>
+                {isMe && <MenuItem 
+                  icon={<DeleteIcon />}
+                  onClick={() => deletePost()}
+                >
+                    Delete
+                </MenuItem>}
+                {isMe && <MenuItem icon={<EditIcon />}>Update</MenuItem>}
+                <MenuItem icon={<LinkIcon />} onClick={() => {
+                  navigator.clipboard.writeText(String(window.location));
+                }}>Share</MenuItem>
+              </MenuList>
+            </Menu>
           </Flex>
           {/* LIKES AND COMMENTS FOR DESKTOP */}
-          <Box display={['none', 'none', 'block']}>
+          {!isMobile && <Box display={['none', 'none', 'block']}>
             <Flex mt="4" align="center">
               <LikeButton style={{ width: '40px', height: '40px', color: isLiked ? '#F56565' : '#A0AEC0', cursor: 'pointer' }} onClick={handleLike} />
               <LikesBox ml="2" likes={post.likes} />
             </Flex>
             <CommentBox comments={post.comments} postId={post.id} />
-          </Box>
+          </Box>}
         </Box>
         <Box flex="1">
-          <Text fontSize="2xl" bg="gray.200" color="black" p="4" rounded="lg">
+          <Text fontSize="2xl" bg="white" border="1px" borderColor="inherit" shadow="md" color="black" p="4" rounded="lg">
             {post.content}
           </Text>
         </Box>
         {/* LIKES AND COMMENTS FOR MOBILE */}
-        <Box display={['block', 'block', 'none']}>
+        {isMobile && <Box display={['block', 'block', 'none']}>
           <Flex mt="4" align="center">
             <LikeButton style={{ width: '40px', height: '40px', color: isLiked ? '#F56565' : '#A0AEC0', cursor: 'pointer' }} onClick={handleLike} />
             <LikesBox ml="2" likes={post.likes} />
           </Flex>
           <CommentBox comments={post.comments} postId={post.id} />
-        </Box>
+        </Box>}
       </Stack>
     </>
   );
