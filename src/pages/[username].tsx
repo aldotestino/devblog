@@ -6,13 +6,14 @@ import Head from 'next/head';
 import Link from 'next/link';
 import React, { useMemo } from 'react';
 import PostCard from '../components/PostCard';
-import UpdateProfileModal from '../components/UpdateProfileModal';
+import EditProfileModal from '../components/EditProfileModal';
 import { InboxIcon } from '@heroicons/react/outline';
 import { useAuth } from '../store/User';
 import { initializeApollo } from '../utils/apolloConfig';
 import { UserQuery, UserQueryVariables } from '../__generated__/UserQuery';
-import { UpdateProfileMutation, UpdateProfileMutationVariables } from '../__generated__/UpdateProfileMutation';
+//import { EditProfileMutation, EditProfileMutationVariables } from '../__generated__/EditProfileMutation';
 import { useRouter } from 'next/router';
+import { EditProfileMutation, EditProfileMutationVariables } from '../__generated__/EditProfileMutation';
 
 const USER_QUERY = gql`
   query UserQuery($username: String!) {
@@ -40,9 +41,9 @@ const USER_QUERY = gql`
   }
 `;
 
-const UPDATE_PROFILE_MUTATION = gql`
-  mutation UpdateProfileMutation($name: String!, $surname: String!, $username: String!, $avatar: String) {
-    updateProfile(name: $name, surname: $surname, username: $username, avatar: $avatar) {
+const EDIT_PROFILE_MUTATION = gql`
+  mutation EditProfileMutation($name: String!, $surname: String!, $username: String!, $avatar: String) {
+    editProfile(name: $name, surname: $surname, username: $username, avatar: $avatar) {
       name
       surname
       username
@@ -68,13 +69,13 @@ function UserProfile({ username } : UserPageProps) {
     }
   });
 
-  const [updateProfile, { loading }] = useMutation<UpdateProfileMutation, UpdateProfileMutationVariables>(UPDATE_PROFILE_MUTATION, {
+  const [editProfile, { loading }] = useMutation<EditProfileMutation, EditProfileMutationVariables>(EDIT_PROFILE_MUTATION, {
     context: {
       headers: {
         authorization: user?.token
       }
     },
-    onCompleted: ({ updateProfile: { name, surname, username, avatar } }) => {
+    onCompleted: ({ editProfile: { name, surname, username, avatar } }) => {
       const prevUsername = user.username;
       setUser(prevUser => ({
         ...prevUser,
@@ -83,7 +84,7 @@ function UserProfile({ username } : UserPageProps) {
         username,
         avatar
       }));
-
+      onClose();
       if(prevUsername !== username) {
         router.replace(`/@${username}`);
       }
@@ -102,8 +103,8 @@ function UserProfile({ username } : UserPageProps) {
 
   const isMe = useMemo(() => isAuth && user.id === data.user.id, [data, user]);
 
-  async function action(variables: UpdateProfileMutationVariables) {
-    await updateProfile({
+  function action(variables: EditProfileMutationVariables) {
+    editProfile({
       variables
     });
   }
@@ -113,7 +114,7 @@ function UserProfile({ username } : UserPageProps) {
       <Head>
         <title>devBlog - {data.user.username}</title>
       </Head>
-      <UpdateProfileModal isLoading={loading} isOpen={isOpen} onClose={onClose} action={action} />
+      <EditProfileModal isLoading={loading} isOpen={isOpen} onClose={onClose} action={action} />
       <Stack justify="space-between" spacing="10" direction={['column', 'column', 'row']}>
         <Box>
           <Flex>
@@ -138,7 +139,7 @@ function UserProfile({ username } : UserPageProps) {
                 </Button>
               </Link>       
               <Button variant="outline" colorScheme="blue" onClick={onOpen} leftIcon={<EditIcon />}>
-                Update profile
+                Edit profile
               </Button>
             </Stack>}
         </Box>

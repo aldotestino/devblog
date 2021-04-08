@@ -11,6 +11,7 @@ import { LikeMutationVariables } from '../../__generated__/LikeMutation';
 import { UpdateProfileMutationVariables } from '../../__generated__/UpdateProfileMutation';
 import { DeletePostMutationVariables } from '../../__generated__/DeletePostMutation';
 import { DeleteCommentMutationVariables } from '../../__generated__/DeleteCommentMutation';
+import { EditPostMutationVariables } from '../../__generated__/EditPostMutation';
 
 const signup: ResolverFunc<unknown, SignupMutationVariables> = async (_, { password, ...rest }) => {
   const hashedPassword = await bcrypt.hash(password, 10);
@@ -51,7 +52,7 @@ const login: ResolverFunc<unknown, LoginMutationVariables> = async (_, { passwor
 
 };
 
-const updateProfile: ResolverFunc<unknown, UpdateProfileMutationVariables> = (_, args, { userId }) => {
+const editProfile: ResolverFunc<unknown, UpdateProfileMutationVariables> = (_, args, { userId }) => {
   return prisma.user.update({
     where: {
       id: userId
@@ -149,13 +150,33 @@ const deleteComment: ResolverFunc<unknown, DeleteCommentMutationVariables> = asy
   return true;
 };
 
+const editPost: ResolverFunc<unknown, EditPostMutationVariables> = async (_, { postId, ...args }, { userId }) => {
+  const postToEdit = await prisma.post.findUnique({
+    where: {
+      id: postId
+    }
+  });
+
+  if(postToEdit.userId !== userId) {
+    throw new Error('Cannot edit post');
+  }
+
+  return prisma.post.update({
+    where: {
+      id: postId
+    },
+    data: args
+  });
+};
+
 export {
   signup,
   login,
-  updateProfile,
+  editProfile,
   post,
   comment,
   like,
   deletePost,
-  deleteComment
+  deleteComment,
+  editPost
 };

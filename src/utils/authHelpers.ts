@@ -67,7 +67,7 @@ export function validateLoginVariables(values: LoginMutationVariables): Partial<
   return errors;
 }
 
-export function validateUpdateProfileVariables(values: UpdateProfileMutationVariables): Partial<UpdateProfileMutationVariables> {
+export function validateEditProfileVariables(values: UpdateProfileMutationVariables): Partial<UpdateProfileMutationVariables> {
   const errors: Partial<UpdateProfileMutationVariables> = {}; 
 
   if (!values.username) {

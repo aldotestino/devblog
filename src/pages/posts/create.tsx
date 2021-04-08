@@ -15,7 +15,7 @@ const POST_MUTATION = gql`
   }
 `;
 
-function validatePostVariables(values: PostMutationVariables): Partial<PostMutationVariables> {
+export function validatePostVariables(values: PostMutationVariables): Partial<PostMutationVariables> {
   const errors: Partial<PostMutationVariables> = {};
 
   if (!values.title) {

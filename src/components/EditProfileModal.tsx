@@ -3,19 +3,20 @@ import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody,
 import { Field, Form, Formik } from 'formik';
 import React from 'react';
 import { useAuth } from '../store/User';
-import { validateUpdateProfileVariables } from '../utils/authHelpers';
+import { validateEditProfileVariables } from '../utils/authHelpers';
+import { EditProfileMutationVariables } from '../__generated__/EditProfileMutation';
 import { UpdateProfileMutationVariables } from '../__generated__/UpdateProfileMutation';
 
-interface UpdateProfileModalProps extends Partial<ModalProps> {
+interface EditProfileModalProps extends Partial<ModalProps> {
   action: (variables: UpdateProfileMutationVariables) => void,
   isLoading: boolean
 }
 
-function UpdateProfileModal({ isOpen, onClose, action, isLoading }: UpdateProfileModalProps) {
+function EditProfileModal({ isOpen, onClose, action, isLoading }: EditProfileModalProps) {
 
   const { user } = useAuth();
 
-  const initialValues: UpdateProfileMutationVariables = {
+  const initialValues: EditProfileMutationVariables = {
     name: user?.name,
     surname: user?.surname,
     username: user?.username,
@@ -27,15 +28,14 @@ function UpdateProfileModal({ isOpen, onClose, action, isLoading }: UpdateProfil
       <Modal isOpen={isOpen} onClose={onClose} motionPreset="slideInBottom" size="xl">
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader fontStyle="italic" fontSize="2xl">Update Profile</ModalHeader>
+          <ModalHeader fontStyle="italic" fontSize="2xl">Edit Profile</ModalHeader>
           <ModalCloseButton />
           <Formik
             initialValues={initialValues}
             validateOnBlur={false}
-            validate={validateUpdateProfileVariables}
-            onSubmit={async variables => {
-              await action(variables);
-              onClose();
+            validate={validateEditProfileVariables}
+            onSubmit={variables => {
+              action(variables);
             }}
           >
             {formik => 
@@ -88,8 +88,8 @@ function UpdateProfileModal({ isOpen, onClose, action, isLoading }: UpdateProfil
                   </Stack>
                 </ModalBody>
                 <ModalFooter>
-                  <Button mr="4" type="button" colorScheme="red" onClick={onClose}>Annulla</Button>
-                  <Button colorScheme="blue" type="submit" isLoading={isLoading}>Aggiorna</Button>
+                  <Button mr="4" type="button" colorScheme="red" onClick={onClose}>Close</Button>
+                  <Button colorScheme="blue" type="submit" isLoading={isLoading}>Edit</Button>
                 </ModalFooter>
               </Form>}
           </Formik>
@@ -99,4 +99,4 @@ function UpdateProfileModal({ isOpen, onClose, action, isLoading }: UpdateProfil
   );
 }
 
-export default UpdateProfileModal;   
+export default EditProfileModal;   

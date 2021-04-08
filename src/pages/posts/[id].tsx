@@ -2,7 +2,7 @@ import { gql, useMutation, useQuery } from '@apollo/client';
 import { GetServerSideProps } from 'next';
 import React, { useMemo, useState } from 'react';
 import { DeleteIcon, EditIcon, LinkIcon } from '@chakra-ui/icons';
-import { Avatar, Box, Flex, Heading, Text, Link as CLink, Stack, useToast, useBreakpointValue, Menu, MenuButton, MenuList, MenuItem, IconButton, Icon } from '@chakra-ui/react';
+import { Avatar, Box, Flex, Heading, Text, Link as CLink, Stack, useToast, useBreakpointValue, Menu, MenuButton, MenuList, MenuItem, IconButton, Icon, useDisclosure } from '@chakra-ui/react';
 import { initializeApollo } from '../../utils/apolloConfig';
 import { PostQuery, PostQueryVariables } from '../../__generated__/PostQuery';
 import Link from 'next/link';
@@ -15,6 +15,8 @@ import LikesBox from '../../components/LikesBox';
 import Head from 'next/head';
 import { DeletePostMutation, DeletePostMutationVariables } from '../../__generated__/DeletePostMutation';
 import { useRouter } from 'next/router';
+import EditPostModal from '../../components/EditPostModal';
+import { EditPostMutation, EditPostMutationVariables } from '../../__generated__/EditPostMutation';
 
 const POST_QUERY = gql` 
   query PostQuery($id: ID!) {
@@ -62,6 +64,16 @@ const LIKE_MUTATION = gql`
   }
 `;
 
+const EDIT_POST_MUTATION = gql`
+  mutation EditPostMutation($postId: ID!, $title: String!, $description: String!, $content: String!) {
+    editPost(postId: $postId, title: $title, description: $description, content: $content) {
+      title,
+      description,
+      content
+    }
+  }
+`;
+
 interface PostProps {
   id: string
 }
@@ -69,7 +81,8 @@ interface PostProps {
 function Post({ id }: PostProps) {
 
   const toast = useToast();
-  const { data: { post } } = useQuery<PostQuery, PostQueryVariables>(POST_QUERY, {
+  const { onOpen, isOpen, onClose } = useDisclosure();
+  const { data: { post }, refetch } = useQuery<PostQuery, PostQueryVariables>(POST_QUERY, {
     variables: {
       id
     }
@@ -126,11 +139,47 @@ function Post({ id }: PostProps) {
     });
   }
 
+  const [editPost, { loading }] = useMutation<EditPostMutation, EditPostMutationVariables>(EDIT_POST_MUTATION, {
+    context: {
+      headers: {
+        authorization: user?.token
+      }
+    },
+    onCompleted: ({ editPost }) => {
+      if(editPost) {
+        onClose();
+        refetch();
+      }
+    },
+    onError: (e) => {
+      console.log(e);
+    }
+  });
+
+  const initalValues = {
+    title: post.title,
+    description: post.description,
+    content: post.content
+  };
+
+  function action(variables: Partial<EditPostMutationVariables>) {
+    editPost({
+      variables: {
+        postId: post.id,
+        title: variables.title!,
+        description: variables.description!,
+        content: variables.content!
+      }
+    });
+  }
+
   return (
     <>
       <Head>
         <title>devBlog - @{post.user.username}/{post.title}</title>
       </Head>
+
+      <EditPostModal isOpen={isOpen} isLoading={loading} onClose={onClose} initialValues={initalValues} action={action} />
 
       <Stack spacing={['4', '4', '10']} direction={['column', 'column', 'row']}>
         <Box w={['full', 'full', 'lg']}>
@@ -160,10 +209,14 @@ function Post({ id }: PostProps) {
                 >
                     Delete
                 </MenuItem>}
-                {isMe && <MenuItem icon={<EditIcon />}>Update</MenuItem>}
-                <MenuItem icon={<LinkIcon />} onClick={() => {
-                  navigator.clipboard.writeText(String(window.location));
-                }}>Share</MenuItem>
+                {isMe && <MenuItem icon={<EditIcon />} onClick={onOpen}>Edit</MenuItem>}
+                <MenuItem 
+                  icon={<LinkIcon />} 
+                  onClick={() => {
+                    navigator.clipboard.writeText(String(window.location));
+                  }}>
+                  Share
+                </MenuItem>
               </MenuList>
             </Menu>
           </Flex>

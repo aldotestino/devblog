@@ -52,12 +52,13 @@ export const typeDefs = gql`
   type Mutation {
     signup(name: String!, surname: String!, email: String!, username: String! password: String!, avatar: String): Boolean!
     login(username: String!, password: String!): AuthPayload
-    updateProfile(name: String!, surname: String!, username: String!, avatar: String): User
+    editProfile(name: String!, surname: String!, username: String!, avatar: String): User
     post(title: String!, description: String!, content: String!): Post!
     comment(content: String!, postId: ID!): Comment!
     like(postId: ID!): Boolean!
     deletePost(postId: ID!): Boolean!
     deleteComment(commentId: ID!): Boolean!
+    editPost(postId: ID!, title: String!, description: String!, content: String!): Post
   }
 
   scalar DateTime
