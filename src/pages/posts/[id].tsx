@@ -17,6 +17,7 @@ import { DeletePostMutation, DeletePostMutationVariables } from '../../__generat
 import { useRouter } from 'next/router';
 import EditPostModal from '../../components/EditPostModal';
 import { EditPostMutation, EditPostMutationVariables } from '../../__generated__/EditPostMutation';
+import Markdown from '../../components/Markdown';
 
 const POST_QUERY = gql` 
   query PostQuery($id: ID!) {
@@ -229,10 +230,8 @@ function Post({ id }: PostProps) {
             <CommentBox comments={post.comments} postId={post.id} />
           </Box>}
         </Box>
-        <Box flex="1">
-          <Text fontSize="2xl" bg="white" border="1px" borderColor="inherit" shadow="md" color="black" p="4" rounded="lg">
-            {post.content}
-          </Text>
+        <Box flex="1" border="1px" bg="white" borderColor="inherit" shadow="md" p="4" rounded="lg">
+          <Markdown content={post.content} />
         </Box>
         {/* LIKES AND COMMENTS FOR MOBILE */}
         {isMobile && <Box display={['block', 'block', 'none']}>

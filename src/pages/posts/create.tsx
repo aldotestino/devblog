@@ -113,7 +113,7 @@ function CreatePost() {
                       {({ field }) => 
                         <FormControl isInvalid={formik.touched.content && !!formik.errors.content}>
                           <FormLabel>Content</FormLabel>  
-                          <Textarea {...field} type="text" placeholder="Write your post here" id="content" />
+                          <Textarea {...field} h="xs" type="text" placeholder="Write your post here" id="content" />
                           <FormErrorMessage>{formik.errors.content}</FormErrorMessage>
                         </FormControl>}
                     </Field>}
@@ -127,7 +127,7 @@ function CreatePost() {
                     {({ field }) => 
                       <FormControl isInvalid={formik.touched.content && !!formik.errors.content}>
                         <FormLabel>Content</FormLabel>  
-                        <Textarea {...field} type="text" placeholder="Write your post here" id="content" />
+                        <Textarea {...field} h="lg" type="text" placeholder="Write your post here" id="content" />
                         <FormErrorMessage>{formik.errors.content}</FormErrorMessage>
                       </FormControl>}
                   </Field>}

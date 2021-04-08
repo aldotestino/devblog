@@ -7,6 +7,7 @@ import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 import NProgress from 'nprogress';
 import 'nprogress/nprogress.css';
+import 'github-markdown-css';
 
 NProgress.configure({ showSpinner: false });
 

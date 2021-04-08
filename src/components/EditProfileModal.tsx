@@ -5,10 +5,9 @@ import React from 'react';
 import { useAuth } from '../store/User';
 import { validateEditProfileVariables } from '../utils/authHelpers';
 import { EditProfileMutationVariables } from '../__generated__/EditProfileMutation';
-import { UpdateProfileMutationVariables } from '../__generated__/UpdateProfileMutation';
 
 interface EditProfileModalProps extends Partial<ModalProps> {
-  action: (variables: UpdateProfileMutationVariables) => void,
+  action: (variables: EditProfileMutationVariables) => void,
   isLoading: boolean
 }
 

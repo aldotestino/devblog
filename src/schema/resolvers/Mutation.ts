@@ -8,10 +8,10 @@ import prisma from '../../lib/prisma';
 import { PostMutationVariables } from '../../__generated__/PostMutation';
 import { CommentMutationVariables } from '../../__generated__/CommentMutation';
 import { LikeMutationVariables } from '../../__generated__/LikeMutation';
-import { UpdateProfileMutationVariables } from '../../__generated__/UpdateProfileMutation';
 import { DeletePostMutationVariables } from '../../__generated__/DeletePostMutation';
 import { DeleteCommentMutationVariables } from '../../__generated__/DeleteCommentMutation';
 import { EditPostMutationVariables } from '../../__generated__/EditPostMutation';
+import { EditProfileMutationVariables } from '../../__generated__/EditProfileMutation';
 
 const signup: ResolverFunc<unknown, SignupMutationVariables> = async (_, { password, ...rest }) => {
   const hashedPassword = await bcrypt.hash(password, 10);
@@ -52,7 +52,7 @@ const login: ResolverFunc<unknown, LoginMutationVariables> = async (_, { passwor
 
 };
 
-const editProfile: ResolverFunc<unknown, UpdateProfileMutationVariables> = (_, args, { userId }) => {
+const editProfile: ResolverFunc<unknown, EditProfileMutationVariables> = (_, args, { userId }) => {
   return prisma.user.update({
     where: {
       id: userId

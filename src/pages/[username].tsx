@@ -11,7 +11,6 @@ import { InboxIcon } from '@heroicons/react/outline';
 import { useAuth } from '../store/User';
 import { initializeApollo } from '../utils/apolloConfig';
 import { UserQuery, UserQueryVariables } from '../__generated__/UserQuery';
-//import { EditProfileMutation, EditProfileMutationVariables } from '../__generated__/EditProfileMutation';
 import { useRouter } from 'next/router';
 import { EditProfileMutation, EditProfileMutationVariables } from '../__generated__/EditProfileMutation';
 
