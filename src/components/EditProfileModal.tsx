@@ -1,10 +1,12 @@
 import { AtSignIcon, ViewIcon } from '@chakra-ui/icons';
-import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, Button, ModalProps, FormErrorMessage, InputGroup, Input, FormControl, InputLeftElement, Stack } from '@chakra-ui/react';
-import { Field, Form, Formik } from 'formik';
+import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, Button, ModalProps, Stack } from '@chakra-ui/react';
+import { Form, Formik } from 'formik';
 import React from 'react';
 import { useAuth } from '../store/User';
+import { COLOR_SCHEME } from '../styles/theme';
 import { validateEditProfileVariables } from '../utils/authHelpers';
 import { EditProfileMutationVariables } from '../__generated__/EditProfileMutation';
+import InputField from './InputField';
 
 interface EditProfileModalProps extends Partial<ModalProps> {
   action: (variables: EditProfileMutationVariables) => void,
@@ -40,55 +42,18 @@ function EditProfileModal({ isOpen, onClose, action, isLoading }: EditProfileMod
             {formik => 
               <Form>
                 <ModalBody>
-                  <Stack spacing="4">
+                  <Stack spacing="6">
                     <Stack direction="row" spacing="4">
-                      <Field name="name">
-                        {({ field }) => 
-                          <FormControl isInvalid={formik.touched.name && !!formik.errors.name}>
-                            <Input {...field} type="text" placeholder="Name" id="name" />
-                            <FormErrorMessage>{formik.errors.name}</FormErrorMessage>
-                          </FormControl>}
-                      </Field>
-
-                      <Field name="surname">
-                        {({ field }) => 
-                          <FormControl isInvalid={formik.touched.surname && !!formik.errors.surname}>
-                            <Input {...field} type="text" placeholder="Surname" id="surname" />
-                            <FormErrorMessage>{formik.errors.surname}</FormErrorMessage>
-                          </FormControl>}
-                      </Field>
+                      <InputField name="name" placeholder="Name" errorMessage={formik.errors.name} type="text" isInvalid={formik.touched.name && !!formik.errors.name} />
+                      <InputField name="surname" placeholder="Surname" errorMessage={formik.errors.surname} type="text" isInvalid={formik.touched.surname && !!formik.errors.surname} />
                     </Stack>
-
-                    <Field name="username">
-                      {({ field }) => 
-                        <FormControl isInvalid={formik.touched.username && !!formik.errors.username}>
-                          <InputGroup>
-                            <InputLeftElement >
-                              <AtSignIcon />
-                            </InputLeftElement>
-                            <Input {...field} placeholder="Username" id="username" />
-                          </InputGroup>
-                          <FormErrorMessage>{formik.errors.username}</FormErrorMessage>
-                        </FormControl>}
-                    </Field>
-
-                    <Field name="avatar">
-                      {({ field }) => 
-                        <FormControl isInvalid={formik.touched.avatar && !!formik.errors.avatar}>
-                          <InputGroup>
-                            <InputLeftElement>
-                              <ViewIcon />
-                            </InputLeftElement>
-                            <Input {...field} type="text" placeholder="Avatar" id="avatar" />
-                          </InputGroup>
-                          <FormErrorMessage>{formik.errors.avatar}</FormErrorMessage>
-                        </FormControl>}
-                    </Field>
+                    <InputField name="username" icon={<AtSignIcon />} errorMessage={formik.errors.username} placeholder="Username" type="text" isInvalid={formik.touched.username && !!formik.errors.username} />
+                    <InputField name="avatar" icon={<ViewIcon />} placeholder="Avatar" errorMessage={formik.errors.avatar} type="text" isInvalid={formik.touched.avatar && !!formik.errors.avatar} />
                   </Stack>
                 </ModalBody>
                 <ModalFooter>
                   <Button mr="4" type="button" colorScheme="red" onClick={onClose}>Close</Button>
-                  <Button colorScheme="blue" type="submit" isLoading={isLoading}>Edit</Button>
+                  <Button colorScheme={COLOR_SCHEME} type="submit" isLoading={isLoading}>Edit</Button>
                 </ModalFooter>
               </Form>}
           </Formik>

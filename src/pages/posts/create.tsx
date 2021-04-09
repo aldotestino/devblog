@@ -1,11 +1,14 @@
-import { Box, Button, Flex, FormControl, FormErrorMessage, FormLabel, Heading, Input, Stack, Textarea, useBreakpointValue, useColorModeValue } from '@chakra-ui/react';
-import { Field, Form, Formik } from 'formik';
+import { Box, Button, Flex, Heading, Stack, useBreakpointValue, useColorModeValue } from '@chakra-ui/react';
+import { Form, Formik } from 'formik';
 import { gql, useMutation } from '@apollo/client';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 import { useAuth } from '../../store/User';
 import { PostMutation, PostMutationVariables } from '../../__generated__/PostMutation';
+import InputField from '../../components/InputField';
+import InputFieldWithPreview from '../../components/InputFieldWithPreview';
+import { COLOR_SCHEME } from '../../styles/theme';
 
 const POST_MUTATION = gql`
   mutation PostMutation($title: String!, $description: String!, $content: String!) {
@@ -63,7 +66,7 @@ function CreatePost() {
     if(!isAuth) {
       router.push('/login');
     }
-  }, []);
+  }, [isAuth]);
 
   return (
     <>
@@ -72,7 +75,6 @@ function CreatePost() {
       </Head>
 
       <Flex align="center" direction="column">
-        
         <Box border="1px" w={['xs', 'md', 'full']} transition="background-color .2s ease" bg={bgColor} borderColor="inherit" rounded="lg" p="8">
           <Heading mb="4" fontStyle="italic">
             Create New Post
@@ -90,48 +92,19 @@ function CreatePost() {
             {formik => 
               <Form>
                 <Stack direction="row" spacing={['0', '0', '10']}>
-                  <Stack spacing="4" w={!isMobile ? 'lg' : 'full'}>
-                    <Field name="title">
-                      {({ field }) => 
-                        <FormControl isInvalid={formik.touched.title && !!formik.errors.title}>
-                          <FormLabel>Title</FormLabel>  
-                          <Input {...field} type="text" placeholder="The title for this post" id="title" />
-                          <FormErrorMessage>{formik.errors.title}</FormErrorMessage>
-                        </FormControl>}
-                    </Field>
-
-                    <Field name="description">
-                      {({ field }) => 
-                        <FormControl isInvalid={formik.touched.description && !!formik.errors.description}>
-                          <FormLabel>Description</FormLabel>  
-                          <Input {...field} type="description" placeholder="Enter a short description" id="description" />
-                          <FormErrorMessage>{formik.errors.description}</FormErrorMessage>
-                        </FormControl>}
-                    </Field>
-
-                    {isMobile && <Field name="content">
-                      {({ field }) => 
-                        <FormControl isInvalid={formik.touched.content && !!formik.errors.content}>
-                          <FormLabel>Content</FormLabel>  
-                          <Textarea {...field} h="xs" type="text" placeholder="Write your post here" id="content" />
-                          <FormErrorMessage>{formik.errors.content}</FormErrorMessage>
-                        </FormControl>}
-                    </Field>}
-
-                    <Button type="submit" colorScheme="blue" isLoading={loading}>
-                    Submit  
-                    </Button>         
+                  <Stack spacing="6" w={!isMobile ? 'lg' : 'full'}>
+                    <InputField name="title" errorMessage={formik.errors.title} isInvalid={formik.touched.title && !!formik.errors.title} label="Title" type="text" placeholder="The title for this post" />
+                    <InputField name="description" errorMessage={formik.errors.description} isInvalid={formik.touched.description && !!formik.errors.description} label="Description" type="text" placeholder="Enter a short description" />
+                    {isMobile && 
+                      <InputFieldWithPreview errorMessage={formik.errors.content} content={formik.values.content} name="content" placeholder="Write your post here" type="text" isInvalid={formik.touched.content && !!formik.errors.content} />
+                    }
+                    <Button type="submit" colorScheme={COLOR_SCHEME} isLoading={loading}>
+                      Submit  
+                    </Button>    
                   </Stack>
-                
-                  {!isMobile && <Field name="content">
-                    {({ field }) => 
-                      <FormControl isInvalid={formik.touched.content && !!formik.errors.content}>
-                        <FormLabel>Content</FormLabel>  
-                        <Textarea {...field} h="lg" type="text" placeholder="Write your post here" id="content" />
-                        <FormErrorMessage>{formik.errors.content}</FormErrorMessage>
-                      </FormControl>}
-                  </Field>}
-
+                  {!isMobile && 
+                    <InputFieldWithPreview errorMessage={formik.errors.content} content={formik.values.content} name="content" placeholder="Write your post here" type="text" isInvalid={formik.touched.content && !!formik.errors.content} />
+                  }
                 </Stack>
               </Form>}
           </Formik>

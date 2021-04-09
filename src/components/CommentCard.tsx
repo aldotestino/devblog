@@ -7,6 +7,7 @@ import { useAuth } from '../store/User';
 import { PostQuery_post_comments } from '../__generated__/PostQuery';
 import { gql, useMutation } from '@apollo/client';
 import { DeleteCommentMutation, DeleteCommentMutationVariables } from '../__generated__/DeleteCommentMutation';
+import { COLOR_SCHEME } from '../styles/theme';
 
 const DELETE_COMMENT_MUTATION = gql`
   mutation DeleteCommentMutation($commentId: ID!) {
@@ -48,7 +49,7 @@ function CommentCard({ comment, removeFromUI }: CommentCardProps) {
           <Box>
             <Text fontSize="lg">
               <Link href={`/@${comment.user.username}`} passHref>
-                <CLink color="blue.400">            
+                <CLink color={`${COLOR_SCHEME}.400`}>            
                   {`@${comment.user.username}`}
                 </CLink>
               </Link>

@@ -13,6 +13,7 @@ import { initializeApollo } from '../utils/apolloConfig';
 import { UserQuery, UserQueryVariables } from '../__generated__/UserQuery';
 import { useRouter } from 'next/router';
 import { EditProfileMutation, EditProfileMutationVariables } from '../__generated__/EditProfileMutation';
+import { COLOR_SCHEME } from '../styles/theme';
 
 const USER_QUERY = gql`
   query UserQuery($username: String!) {
@@ -133,11 +134,11 @@ function UserProfile({ username } : UserPageProps) {
           {isMe && 
             <Stack spacing="4" mt="4" direction="row">
               <Link href="/posts/create" passHref>
-                <Button variant="outline" as="a" colorScheme="blue" leftIcon={<AddIcon />}>
+                <Button variant="outline" as="a" colorScheme={COLOR_SCHEME} leftIcon={<AddIcon />}>
                   New Post        
                 </Button>
               </Link>       
-              <Button variant="outline" colorScheme="blue" onClick={onOpen} leftIcon={<EditIcon />}>
+              <Button variant="outline" colorScheme={COLOR_SCHEME} onClick={onOpen} leftIcon={<EditIcon />}>
                 Edit profile
               </Button>
             </Stack>}

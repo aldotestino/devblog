@@ -18,6 +18,7 @@ import { useRouter } from 'next/router';
 import EditPostModal from '../../components/EditPostModal';
 import { EditPostMutation, EditPostMutationVariables } from '../../__generated__/EditPostMutation';
 import Markdown from '../../components/Markdown';
+import { COLOR_SCHEME } from '../../styles/theme';
 
 const POST_QUERY = gql` 
   query PostQuery($id: ID!) {
@@ -191,9 +192,9 @@ function Post({ id }: PostProps) {
               <Avatar mr="4" src={post.user.avatar} name={post.user.username} size="lg" />
               <Box>
                 <Text fontSize="xl">
-                By{' '}
+                  By{' '}
                   <Link href={`/@${post.user.username}`} passHref>
-                    <CLink color="blue.400">
+                    <CLink color={`${COLOR_SCHEME}.400`}>
                       {`@${post.user.username}`}
                     </CLink>
                   </Link> 
@@ -230,7 +231,7 @@ function Post({ id }: PostProps) {
             <CommentBox comments={post.comments} postId={post.id} />
           </Box>}
         </Box>
-        <Box flex="1" border="1px" bg="white" borderColor="inherit" shadow="md" p="4" rounded="lg">
+        <Box flex="1" h="fit-content" border="1px" bg="white" borderColor="inherit" shadow="md" p="4" rounded="lg">
           <Markdown content={post.content} />
         </Box>
         {/* LIKES AND COMMENTS FOR MOBILE */}

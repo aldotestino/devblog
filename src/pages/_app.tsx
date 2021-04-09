@@ -8,6 +8,7 @@ import React, { useEffect } from 'react';
 import NProgress from 'nprogress';
 import 'nprogress/nprogress.css';
 import 'github-markdown-css';
+import { theme } from '../styles/theme';
 
 NProgress.configure({ showSpinner: false });
 
@@ -34,7 +35,7 @@ function App({ Component, pageProps }) {
   }, []);
 
   return (
-    <ChakraProvider resetCSS>
+    <ChakraProvider resetCSS theme={theme}>
       <ApolloProvider client={client}>
         <AuthProvider>
           <Layout>

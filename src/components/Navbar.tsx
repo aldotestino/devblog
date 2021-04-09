@@ -1,9 +1,10 @@
 import { AddIcon, ChevronDownIcon, MoonIcon, SunIcon } from '@chakra-ui/icons';
-import { Stack, Flex, Heading, Button, Menu, MenuItem, MenuButton, MenuList, MenuDivider, Avatar, Text, useColorMode, useColorModeValue, Switch, LinkOverlay, LinkBox, Box, Icon } from '@chakra-ui/react';
+import { Stack, Flex, Heading, Button, Menu, MenuItem, MenuButton, MenuList, MenuDivider, Avatar, Text, useColorMode, useColorModeValue, Switch, LinkOverlay, Icon } from '@chakra-ui/react';
 import { LogoutIcon } from '@heroicons/react/outline';
 import Link from 'next/link';
 import React from 'react';
 import { useAuth } from '../store/User';
+import { COLOR_SCHEME } from '../styles/theme';
 
 function Navbar() {
 
@@ -21,14 +22,14 @@ function Navbar() {
         </Link>
       </Heading>
       <Flex align="center">
-        {!isAuth && <Switch size="lg" isChecked={colorMode === 'dark'} onChange={toggleColorMode} colorScheme="blue" mr="4" />}
+        {!isAuth && <Switch size="lg" isChecked={colorMode === 'dark'} onChange={toggleColorMode} colorScheme={COLOR_SCHEME} mr="4" />}
         <Link href="/posts/feed" passHref>  
           <Button mr="4" as="a">       
             Feed 
           </Button>
         </Link> 
         {!isAuth ?
-          <Button colorScheme="blue" variant="outline"> 
+          <Button colorScheme={COLOR_SCHEME} variant="outline"> 
             <Link href="/login" passHref>                
               <LinkOverlay>
                 Login
@@ -36,7 +37,7 @@ function Navbar() {
             </Link>
           </Button> : 
           <Menu>
-            <MenuButton variant="outline" colorScheme="blue" as={Button} rightIcon={<ChevronDownIcon />}>
+            <MenuButton variant="outline" colorScheme={COLOR_SCHEME} as={Button} rightIcon={<ChevronDownIcon />}>
             Account
             </MenuButton>
             <MenuList>
@@ -54,7 +55,7 @@ function Navbar() {
               </MenuItem>
               <Link href="/posts/create" passHref>   
                 <MenuItem as="a" icon={<AddIcon />}>
-                    New Post
+                  New Post
                 </MenuItem>
               </Link>
               <MenuItem onClick={logout} icon={<Icon as={LogoutIcon} />}>

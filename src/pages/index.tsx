@@ -2,6 +2,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { Text, Heading, Box, Stack, Button } from '@chakra-ui/react';
 import React from 'react';
+import { COLOR_SCHEME } from '../styles/theme';
 
 function Home() {
   return (
@@ -19,11 +20,12 @@ function Home() {
           </Box>
         </Heading>
         <Text fontSize="2xl" maxW="xl">
-          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Minus excepturi exercitationem repellat beatae animi minima odit molestiae fugit ducimus dignissimos?
+          The perfect place to show yuor thoughts, interests and experiences with the newest technologies in web developement and not only!
+          Share your code thanks to the powerful markdown & code renderer for your posts.
         </Text>
         <Stack spacing="4" direction="row" mt="4" justify={['center', 'center', 'flex-start']}> 
           <Link href="/signup" passHref>        
-            <Button colorScheme="blue" as="a" size="lg">     
+            <Button colorScheme={COLOR_SCHEME} as="a" size="lg">     
                   Sign up
             </Button>
           </Link>

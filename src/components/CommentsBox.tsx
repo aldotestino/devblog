@@ -1,11 +1,13 @@
-import { Box, Button, Flex, FormControl, FormErrorMessage, Stack, Textarea, useToast } from '@chakra-ui/react';
-import { Field, Form, Formik } from 'formik';
+import { Box, Button, Flex, Stack, useToast } from '@chakra-ui/react';
+import { Form, Formik } from 'formik';
 import React, { useState } from 'react';
 import { useMutation, gql } from '@apollo/client';
 import { PostQuery_post_comments } from '../__generated__/PostQuery';
 import { CommentMutation, CommentMutationVariables } from '../__generated__/CommentMutation';
 import { useAuth } from '../store/User';
 import CommentCard from './CommentCard';
+import InputField from './InputField';
+import { COLOR_SCHEME } from '../styles/theme';
 
 const COMMENT_MUTATION = gql`
   mutation CommentMutation($content: String!, $postId: ID!) {
@@ -83,16 +85,10 @@ function CommentBox({ postId, comments }: CommentBoxProps) {
       >
         {formik =>
           <Form>
-            <Field name="content">
-              {({ field }) => 
-                <FormControl isDisabled={!isAuth} isInvalid={formik.touched.content && !!formik.errors.content}>
-                  <Textarea {...field} type="text" placeholder={!isAuth ? 'Login to comment' : 'Comment this post'} id="content" />
-                  <FormErrorMessage>{formik.errors.content}</FormErrorMessage>
-                </FormControl>}
-            </Field>
+            <InputField name="content" isDisabled={!isAuth} textarea errorMessage={formik.errors.content} type="text" placeholder={!isAuth ? 'Login to comment' : 'Comment this post'} isInvalid={formik.touched.content && !!formik.errors.content} />
             <Flex justify="flex-end">
-              <Button type="submit" isDisabled={!isAuth || formik.values.content.trim() === ''} colorScheme="blue" isLoading={loading}>
-              Submit
+              <Button type="submit" isDisabled={!isAuth || formik.values.content.trim() === ''} colorScheme={COLOR_SCHEME} isLoading={loading}>
+                Submit
               </Button>
             </Flex>
           </Form>}
