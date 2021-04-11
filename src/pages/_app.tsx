@@ -6,7 +6,7 @@ import { AuthProvider } from '../store/User';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 import NProgress from 'nprogress';
-import 'nprogress/nprogress.css';
+import '../styles/nprogress.css';
 import 'github-markdown-css';
 import { theme } from '../styles/theme';
 

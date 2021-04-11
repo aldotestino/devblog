@@ -18,15 +18,16 @@ function getFormattedLikes(likes: UserQuery_user_posts_likes[]): string {
 }
 
 interface LikesBoxProps extends FlexProps {
-  likes: UserQuery_user_posts_likes[]
+  likes: UserQuery_user_posts_likes[],
+  borderColor: string
 }
 
-function LikesBox({ likes, ...props }: LikesBoxProps) {
+function LikesBox({ likes, borderColor, ...props }: LikesBoxProps) {
   if(likes.length === 0) return null;
   return (
     <Flex {...props} mt="2" align="center">
-      <AvatarGroup size="sm" max={2}>
-        {likes.map((like, i) => <Avatar key={i} src={like.user.avatar} name={like.user.username} />)}
+      <AvatarGroup size="sm" max={2} borderColor={borderColor}>
+        {likes.map((like, i) => <Avatar key={i} src={like.user.avatar} transition="border-color .2s ease" name={like.user.username} />)}
       </AvatarGroup>
       <Text ml="1">{getFormattedLikes(likes)}</Text>
     </Flex>);

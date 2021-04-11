@@ -6,8 +6,7 @@ import { tomorrow } from 'react-syntax-highlighter/dist/cjs/styles/prism';
 function Code({ language, value }: SyntaxHighlighterProps) {
   return (
     <SyntaxHighlighter 
-      style={tomorrow} 
-      codeTagProps={{ style: { fontSize: '16px' } }}
+      style={tomorrow}
       showLineNumbers
       language={language}
     >

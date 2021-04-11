@@ -1,8 +1,8 @@
 import { gql, useMutation, useQuery } from '@apollo/client';
-import { GetServerSideProps } from 'next';
+import { GetStaticPaths, GetStaticProps } from 'next';
 import React, { useMemo, useState } from 'react';
 import { DeleteIcon, EditIcon, LinkIcon } from '@chakra-ui/icons';
-import { Avatar, Box, Flex, Heading, Text, Link as CLink, Stack, useToast, useBreakpointValue, Menu, MenuButton, MenuList, MenuItem, IconButton, Icon, useDisclosure } from '@chakra-ui/react';
+import { Avatar, Box, Flex, Heading, Text, Link as CLink, Stack, useToast, useBreakpointValue, Menu, MenuButton, MenuList, MenuItem, IconButton, Icon, useDisclosure, useColorModeValue } from '@chakra-ui/react';
 import { initializeApollo } from '../../utils/apolloConfig';
 import { PostQuery, PostQueryVariables } from '../../__generated__/PostQuery';
 import Link from 'next/link';
@@ -19,6 +19,7 @@ import EditPostModal from '../../components/EditPostModal';
 import { EditPostMutation, EditPostMutationVariables } from '../../__generated__/EditPostMutation';
 import Markdown from '../../components/Markdown';
 import { COLOR_SCHEME } from '../../styles/theme';
+import prisma from '../../lib/prisma';
 
 const POST_QUERY = gql` 
   query PostQuery($id: ID!) {
@@ -226,7 +227,7 @@ function Post({ id }: PostProps) {
           {!isMobile && <Box display={['none', 'none', 'block']}>
             <Flex mt="4" align="center">
               <LikeButton style={{ width: '40px', height: '40px', color: isLiked ? '#F56565' : '#A0AEC0', cursor: 'pointer' }} onClick={handleLike} />
-              <LikesBox ml="2" likes={post.likes} />
+              <LikesBox borderColor={useColorModeValue('gray.50', 'gray.800')} ml="2" likes={post.likes} />
             </Flex>
             <CommentBox comments={post.comments} postId={post.id} />
           </Box>}
@@ -238,7 +239,7 @@ function Post({ id }: PostProps) {
         {isMobile && <Box display={['block', 'block', 'none']}>
           <Flex mt="4" align="center">
             <LikeButton style={{ width: '40px', height: '40px', color: isLiked ? '#F56565' : '#A0AEC0', cursor: 'pointer' }} onClick={handleLike} />
-            <LikesBox ml="2" likes={post.likes} />
+            <LikesBox borderColor={useColorModeValue('gray.50', 'gray.800')} ml="2" likes={post.likes} />
           </Flex>
           <CommentBox comments={post.comments} postId={post.id} />
         </Box>}
@@ -247,7 +248,20 @@ function Post({ id }: PostProps) {
   );
 }
 
-export const getServerSideProps: GetServerSideProps<unknown, {id: string}> = async (context) => {
+export const getStaticPaths: GetStaticPaths = async () => {
+  const posts = await prisma.post.findMany({
+    select: {
+      id: true
+    }
+  });
+
+  return {
+    paths: posts.map(p => ({ params: { id: p.id } })),
+    fallback: false
+  };
+};
+
+export const getStaticProps: GetStaticProps<unknown, {id: string}> = async (context) => {
   const apolloClient = initializeApollo();
 
   const id = context.params.id;

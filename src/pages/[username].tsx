@@ -1,7 +1,7 @@
 import { useQuery, gql, useMutation } from '@apollo/client';
 import { AddIcon, EditIcon } from '@chakra-ui/icons';
 import { Avatar, Box, Button, Flex, Heading, Stack, Text, useDisclosure, useToast } from '@chakra-ui/react';
-import { GetServerSideProps } from 'next';
+import { GetStaticPaths, GetStaticProps } from 'next';
 import Head from 'next/head';
 import Link from 'next/link';
 import React, { useMemo } from 'react';
@@ -14,6 +14,7 @@ import { UserQuery, UserQueryVariables } from '../__generated__/UserQuery';
 import { useRouter } from 'next/router';
 import { EditProfileMutation, EditProfileMutationVariables } from '../__generated__/EditProfileMutation';
 import { COLOR_SCHEME } from '../styles/theme';
+import prisma from '../lib/prisma';
 
 const USER_QUERY = gql`
   query UserQuery($username: String!) {
@@ -114,8 +115,9 @@ function UserProfile({ username } : UserPageProps) {
       <Head>
         <title>devBlog - {data.user.username}</title>
       </Head>
+      
       <EditProfileModal isLoading={loading} isOpen={isOpen} onClose={onClose} action={action} />
-      <Stack justify="space-between" spacing="10" direction={['column', 'column', 'row']}>
+      <Stack spacing="10" direction={['column', 'column', 'row']}>
         <Box>
           <Flex>
             <Avatar src={isMe ? user.avatar : data.user.avatar} name={isMe ? user.username : data.user.username} size="2xl" mr="4"/>
@@ -158,7 +160,20 @@ function UserProfile({ username } : UserPageProps) {
   );
 }
 
-export const getServerSideProps: GetServerSideProps<unknown, {username: string}> = async (context) => {
+export const getStaticPaths: GetStaticPaths = async () => {
+  const users = await prisma.user.findMany({
+    select: {
+      username: true
+    }
+  });
+
+  return {
+    paths: users.map(u => ({ params: { username: `@${u.username}` } })),
+    fallback: false
+  };
+};
+
+export const getStaticProps: GetStaticProps<unknown, {username: string}> = async (context) => {
   const apolloClient = initializeApollo();
 
   const username = context.params.username.substring(1);

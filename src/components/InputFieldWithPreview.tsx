@@ -10,7 +10,7 @@ interface InputFiedldWitPreviewProps extends InputFieldProps {
 
 function InputFieldWithPreview({ isInvalid, errorMessage, content, type, placeholder, name }: InputFiedldWitPreviewProps) {
   return (
-    <Tabs variant="enclosed" w="full" isLazy>
+    <Tabs colorScheme="indigo" variant="line" flex="1" isLazy>
       <TabList>
         <Tab>Content</Tab>
         <Tab>Preview</Tab>

@@ -36,7 +36,7 @@ function EditProfileModal({ isOpen, onClose, action, initialValues, isLoading }:
               <Form>
                 <ModalBody>
                   <Stack direction="row" spacing={['0', '0', '10']}>
-                    <Stack spacing="6" w={!isMobile ? 'lg' : 'full'}>
+                    <Stack spacing="6" w={isMobile ? 'full' : 'md'}>
                       <InputField name="title" errorMessage={formik.errors.title} isInvalid={formik.touched.title && !!formik.errors.title} label="Title" type="text" placeholder="The title for this post" />
                       <InputField name="description" errorMessage={formik.errors.description} isInvalid={formik.touched.description && !!formik.errors.description} label="Description" type="text" placeholder="Enter a short description" />
                       {isMobile && 

@@ -70,7 +70,6 @@ function Signup() {
     <>
       <Head>
         <title>devBlog - signup</title>
-        <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <Flex align="center" direction="column">

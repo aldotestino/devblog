@@ -44,7 +44,7 @@ function Login() {
         ...user,
         token
       });
-      router.back();
+      router.push(`/@${user.username}`);
     },
     onError: (e) => {
       toast({
@@ -70,7 +70,6 @@ function Login() {
     <>
       <Head>
         <title>devBlog - login</title>
-        <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <Flex align="center" direction="column">

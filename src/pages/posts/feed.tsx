@@ -1,6 +1,6 @@
 import { useQuery, gql } from '@apollo/client';
 import { Heading, SimpleGrid } from '@chakra-ui/react';
-import { GetServerSideProps } from 'next';
+import { GetStaticProps } from 'next';
 import Head from 'next/head';
 import React from 'react';
 import PostCard from '../../components/PostCard';
@@ -47,7 +47,7 @@ function Feed() {
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getStaticProps: GetStaticProps = async () => {
   const apolloClient = initializeApollo();
 
 

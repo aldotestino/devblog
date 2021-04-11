@@ -45,7 +45,7 @@ function PostCard({ post, user }: PostCardProps) {
           </Box>
         </Stack>}
       {!user && <Text>Posted on {new Date(post.createdAt).toLocaleDateString()}</Text>}
-      <LikesBox likes={post.likes} />
+      <LikesBox borderColor={bgColor} likes={post.likes} />
     </LinkBox>
   );
 }
