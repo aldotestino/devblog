@@ -2,7 +2,7 @@ import { Request } from 'express';
 import jwt from 'jsonwebtoken';
 import { SignupMutationVariables } from '../__generated__/SignupMutation';
 import { LoginMutationVariables } from '../__generated__/LoginMutation';
-import { UpdateProfileMutationVariables } from '../__generated__/UpdateProfileMutation';
+import { EditProfileMutationVariables } from '../__generated__/EditProfileMutation';
 
 export const JWT_SECRET = 'devBlog2021';
 
@@ -67,8 +67,8 @@ export function validateLoginVariables(values: LoginMutationVariables): Partial<
   return errors;
 }
 
-export function validateEditProfileVariables(values: UpdateProfileMutationVariables): Partial<UpdateProfileMutationVariables> {
-  const errors: Partial<UpdateProfileMutationVariables> = {}; 
+export function validateEditProfileVariables(values: EditProfileMutationVariables): Partial<EditProfileMutationVariables> {
+  const errors: Partial<EditProfileMutationVariables> = {}; 
 
   if (!values.username) {
     errors.username = 'Campo obbligatorio';
