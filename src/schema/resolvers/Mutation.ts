@@ -169,6 +169,15 @@ const editPost: ResolverFunc<unknown, EditPostMutationVariables> = async (_, { p
   });
 };
 
+const deleteProfile: ResolverFunc<unknown, unknown> = async (_, __, { userId }) => {
+  
+  await prisma.$executeRaw`
+    DELETE FROM User WHERE id=${userId};
+  `;
+
+  return true;
+};
+
 export {
   signup,
   login,
@@ -178,5 +187,6 @@ export {
   like,
   deletePost,
   deleteComment,
-  editPost
+  editPost,
+  deleteProfile
 };

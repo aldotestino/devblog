@@ -48,7 +48,7 @@ function Signup() {
     },
     onError: () => {
       toast({
-        title: 'An error occurred',
+        title: 'Signup',
         description: 'User already exixst',
         status: 'error',
         duration: 3000,

@@ -1,6 +1,6 @@
 import { useQuery, gql, useMutation } from '@apollo/client';
-import { AddIcon, EditIcon } from '@chakra-ui/icons';
-import { Avatar, Box, Button, Flex, Heading, Stack, Text, useDisclosure, useToast } from '@chakra-ui/react';
+import { AddIcon, DeleteIcon, EditIcon } from '@chakra-ui/icons';
+import { Avatar, Box, Button, Flex, Heading, SimpleGrid, Stack, Text, useDisclosure, useToast } from '@chakra-ui/react';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import Head from 'next/head';
 import Link from 'next/link';
@@ -15,6 +15,8 @@ import { useRouter } from 'next/router';
 import { EditProfileMutation, EditProfileMutationVariables } from '../__generated__/EditProfileMutation';
 import { COLOR_SCHEME } from '../styles/theme';
 import prisma from '../lib/prisma';
+import { DeleteProfileMutation } from '../__generated__/DeleteProfileMutation';
+import ConfirmActionDialog from '../components/ConfirmActionDialog';
 
 const USER_QUERY = gql`
   query UserQuery($username: String!) {
@@ -53,6 +55,12 @@ const EDIT_PROFILE_MUTATION = gql`
   } 
 `;
 
+const DELETE_PROFILE_MUTATION = gql`
+  mutation DeleteProfileMutation {
+    deleteProfile
+  }
+`;
+
 interface UserPageProps {
   username: string
 }
@@ -60,6 +68,7 @@ interface UserPageProps {
 function UserProfile({ username } : UserPageProps) {
 
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isOpen: dialogIsOpen, onOpen: dialogOnOpen, onClose: dialogOnClose } = useDisclosure();
   const { isAuth, user, setUser } = useAuth();
   const toast = useToast();
   const router = useRouter();
@@ -92,9 +101,9 @@ function UserProfile({ username } : UserPageProps) {
     },
     onError: () => {
       toast({
-        title: 'An error occurred',
+        title: 'Update Profile',
         description: 'This username is already in use',
-        status: 'error',
+        status: 'warning',
         duration: 3000,
         position: 'top-right',
         isClosable: true
@@ -102,9 +111,24 @@ function UserProfile({ username } : UserPageProps) {
     }
   });
 
+  const [deleteProfile, { loading: deleteProfileLoading }] = useMutation<DeleteProfileMutation>(DELETE_PROFILE_MUTATION, {
+    context: {
+      headers: {
+        authorization: user?.token
+      }
+    },
+    onCompleted: ({ deleteProfile }) => {
+      if(deleteProfile) {
+        dialogOnClose();
+        setUser(null);
+        router.push('/');
+      }
+    }
+  });
+
   const isMe = useMemo(() => isAuth && user.id === data.user.id, [data, user]);
 
-  function action(variables: EditProfileMutationVariables) {
+  function editProfileAction(variables: EditProfileMutationVariables) {
     editProfile({
       variables
     });
@@ -116,9 +140,10 @@ function UserProfile({ username } : UserPageProps) {
         <title>devBlog - {data.user.username}</title>
       </Head>
       
-      <EditProfileModal isLoading={loading} isOpen={isOpen} onClose={onClose} action={action} />
+      <EditProfileModal isLoading={loading} isOpen={isOpen} onClose={onClose} action={editProfileAction} />
+      <ConfirmActionDialog primary="Delete" description="All of yuour posts, likes and comments will be permanently deleted. Are you sure you want to proceed" title="Delete profile" isOpen={dialogIsOpen} onClose={dialogOnClose} isLoading={deleteProfileLoading} action={deleteProfile} />
       <Stack spacing="10" direction={['column', 'column', 'row']}>
-        <Box>
+        <Box w={['full', 'full', 'lg']}>
           <Flex>
             <Avatar src={isMe ? user.avatar : data.user.avatar} name={isMe ? user.username : data.user.username} size="2xl" mr="4"/>
             <Box>
@@ -134,16 +159,19 @@ function UserProfile({ username } : UserPageProps) {
             </Box>
           </Flex>
           {isMe && 
-            <Stack spacing="4" mt="4" direction="row">
+            <SimpleGrid mt="4" columns={3} gap="3" >
               <Link href="/posts/create" passHref>
                 <Button variant="outline" as="a" colorScheme={COLOR_SCHEME} leftIcon={<AddIcon />}>
-                  New Post        
+                  Post        
                 </Button>
               </Link>       
               <Button variant="outline" colorScheme={COLOR_SCHEME} onClick={onOpen} leftIcon={<EditIcon />}>
-                Edit profile
+                Edit
               </Button>
-            </Stack>}
+              <Button variant="outline" colorScheme="red" onClick={dialogOnOpen} leftIcon={<DeleteIcon />}>
+                Delete
+              </Button>
+            </SimpleGrid>}
         </Box>
         <Flex flex="1" justify="center">
           {data.user.posts.length === 0 ? 

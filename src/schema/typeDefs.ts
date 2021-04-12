@@ -59,6 +59,7 @@ export const typeDefs = gql`
     deletePost(postId: ID!): Boolean!
     deleteComment(commentId: ID!): Boolean!
     editPost(postId: ID!, title: String!, description: String!, content: String!): Post
+    deleteProfile: Boolean!
   }
 
   scalar DateTime

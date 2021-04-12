@@ -65,7 +65,7 @@ function CommentBox({ postId, comments }: CommentBoxProps) {
         onSubmit={(variables, { resetForm }) => {
           if(!isAuth) {
             toast({
-              title: 'An error occurred',
+              title: 'Comment post',
               description: 'You have to login to comment',
               status: 'error',
               duration: 3000,

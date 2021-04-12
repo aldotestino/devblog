@@ -38,7 +38,7 @@ function Navbar() {
           </Button> : 
           <Menu>
             <MenuButton variant="outline" colorScheme={COLOR_SCHEME} as={Button} rightIcon={<ChevronDownIcon />}>
-            Account
+              Profile
             </MenuButton>
             <MenuList>
               <Link href={`/@${user.username}`} passHref> 

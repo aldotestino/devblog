@@ -52,7 +52,7 @@ function EditProfileModal({ isOpen, onClose, action, isLoading }: EditProfileMod
                   </Stack>
                 </ModalBody>
                 <ModalFooter>
-                  <Button mr="4" type="button" colorScheme="red" onClick={onClose}>Close</Button>
+                  <Button mr="4" type="button" onClick={onClose}>Close</Button>
                   <Button colorScheme={COLOR_SCHEME} type="submit" isLoading={isLoading}>Edit</Button>
                 </ModalFooter>
               </Form>}

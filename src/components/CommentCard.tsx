@@ -47,9 +47,9 @@ function CommentCard({ comment, removeFromUI }: CommentCardProps) {
         <Flex align="center">
           <Avatar mr="4" src={comment.user.avatar} name={comment.user.username} size="md" />
           <Box>
-            <Text fontSize="lg">
+            <Text fontSize="md">
               <Link href={`/@${comment.user.username}`} passHref>
-                <CLink color={`${COLOR_SCHEME}.400`}>            
+                <CLink fontSize="lg" color={`${COLOR_SCHEME}.400`}>            
                   {`@${comment.user.username}`}
                 </CLink>
               </Link>

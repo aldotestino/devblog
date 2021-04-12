@@ -125,7 +125,7 @@ function Post({ id }: PostProps) {
   function handleLike() {
     if(!isAuth) {
       toast({
-        title: 'An error occurred',
+        title: 'Like post',
         description: 'You have to login to like',
         status: 'error',
         duration: 3000,
@@ -217,6 +217,14 @@ function Post({ id }: PostProps) {
                   icon={<LinkIcon />} 
                   onClick={() => {
                     navigator.clipboard.writeText(String(window.location));
+                    toast({
+                      title: 'Share this post',
+                      description: 'Link copied to your clipboard',
+                      status: 'info',
+                      duration: 3000,
+                      position: 'top-right',
+                      isClosable: true
+                    });
                   }}>
                   Share
                 </MenuItem>

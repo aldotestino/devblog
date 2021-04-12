@@ -48,7 +48,7 @@ function Login() {
     },
     onError: (e) => {
       toast({
-        title: 'An error occurred',
+        title: 'Login',
         description: e.message,
         status: 'error',
         duration: 3000,
