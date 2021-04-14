@@ -1,5 +1,5 @@
 import { gql, useMutation, useQuery } from '@apollo/client';
-import { GetStaticPaths, GetStaticProps } from 'next';
+import { GetServerSideProps } from 'next';
 import React, { useMemo, useState } from 'react';
 import { DeleteIcon, EditIcon, LinkIcon } from '@chakra-ui/icons';
 import { Avatar, Box, Flex, Heading, Text, Link as CLink, Stack, useToast, useBreakpointValue, Menu, MenuButton, MenuList, MenuItem, IconButton, Icon, useDisclosure, useColorModeValue } from '@chakra-ui/react';
@@ -19,7 +19,7 @@ import EditPostModal from '../../components/EditPostModal';
 import { EditPostMutation, EditPostMutationVariables } from '../../__generated__/EditPostMutation';
 import Markdown from '../../components/Markdown';
 import { COLOR_SCHEME } from '../../styles/theme';
-import prisma from '../../lib/prisma';
+import SEO from '../../components/SEO';
 
 const POST_QUERY = gql` 
   query PostQuery($id: ID!) {
@@ -178,12 +178,9 @@ function Post({ id }: PostProps) {
 
   return (
     <>
-      <Head>
-        <title>devBlog - @{post.user.username}/{post.title}</title>
-      </Head>
+      <SEO title={`devBlog - @${post.user.username}/${post.title}`} description={post.description} /> 
 
       <EditPostModal isOpen={isOpen} isLoading={loading} onClose={onClose} initialValues={initalValues} action={action} />
-
       <Stack spacing={['4', '4', '10']} direction={['column', 'column', 'row']}>
         <Box w={['full', 'full', 'lg']}>
           <Heading fontStyle="italic">{post.title}</Heading>
@@ -256,25 +253,12 @@ function Post({ id }: PostProps) {
   );
 }
 
-export const getStaticPaths: GetStaticPaths = async () => {
-  const posts = await prisma.post.findMany({
-    select: {
-      id: true
-    }
-  });
-
-  return {
-    paths: posts.map(p => ({ params: { id: p.id } })),
-    fallback: false
-  };
-};
-
-export const getStaticProps: GetStaticProps<unknown, {id: string}> = async (context) => {
+export const getServerSideProps: GetServerSideProps<unknown, {id: string}> = async (context) => {
   const apolloClient = initializeApollo();
 
   const id = context.params.id;
 
-  await apolloClient.query<PostQuery, PostQueryVariables>({
+  const res = await apolloClient.query<PostQuery, PostQueryVariables>({
     query: POST_QUERY,
     variables: {
       id
@@ -286,6 +270,7 @@ export const getStaticProps: GetStaticProps<unknown, {id: string}> = async (cont
       initialApolloState: apolloClient.cache.extract(),
       id
     },
+    notFound: !res.data.post
   };
 };
 

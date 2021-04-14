@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Stack, Text, Button, Flex, Box, Heading, Link as CLink, useToast, useColorModeValue } from '@chakra-ui/react';
 import { LockIcon, AtSignIcon } from '@chakra-ui/icons';
 import { Formik, Form } from 'formik';
@@ -11,6 +11,7 @@ import { gql, useMutation } from '@apollo/client';
 import { LoginMutation, LoginMutationVariables } from '../__generated__/LoginMutation';
 import InputField from '../components/InputField';
 import { COLOR_SCHEME } from '../styles/theme';
+import SEO from '../components/SEO';
 
 const LOGIN_MUTATION = gql`
   mutation LoginMutation($username: String!, $password: String!) {
@@ -68,9 +69,7 @@ function Login() {
 
   return (
     <>
-      <Head>
-        <title>devBlog - login</title>
-      </Head>
+      <SEO title="devBlog - login"  description="Login with your account" />
 
       <Flex align="center" direction="column">
         <Box border="1px" w={['xs', 'md']} borderColor="inherit" transition="background-color .2s ease" bg={bgColor} rounded="lg" p="8">

@@ -1,9 +1,10 @@
 import { useQuery, gql } from '@apollo/client';
 import { Heading, SimpleGrid } from '@chakra-ui/react';
-import { GetStaticProps } from 'next';
+import { GetServerSideProps, GetStaticProps } from 'next';
 import Head from 'next/head';
 import React from 'react';
 import PostCard from '../../components/PostCard';
+import SEO from '../../components/SEO';
 import { initializeApollo } from '../../utils/apolloConfig';
 import { FeedQuery } from '../../__generated__/FeedQuery';
 
@@ -35,9 +36,7 @@ function Feed() {
 
   return (
     <>
-      <Head>
-        <title>devBlog - feed</title>
-      </Head>
+      <SEO title="devBlog - feed" description="View the latest posts" />
 
       <Heading fontStyle="italic" mb="4">Feed</Heading>
       <SimpleGrid spacing="4" columns={[1, 1, 2]}>
@@ -47,7 +46,7 @@ function Feed() {
   );
 }
 
-export const getStaticProps: GetStaticProps = async () => {
+export const getServerSideProps: GetServerSideProps = async () => {
   const apolloClient = initializeApollo();
 
 

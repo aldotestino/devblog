@@ -9,6 +9,7 @@ import { PostMutation, PostMutationVariables } from '../../__generated__/PostMut
 import InputField from '../../components/InputField';
 import InputFieldWithPreview from '../../components/InputFieldWithPreview';
 import { COLOR_SCHEME } from '../../styles/theme';
+import SEO from '../../components/SEO';
 
 const POST_MUTATION = gql`
   mutation PostMutation($title: String!, $description: String!, $content: String!) {
@@ -70,9 +71,7 @@ function CreatePost() {
 
   return (
     <>
-      <Head>
-        <title>devBlog - New Post</title>
-      </Head>
+      <SEO title="devBlog - New Post" description="Create a new post" />
 
       <Flex align="center" direction="column">
         <Box border="1px" w={['xs', 'md', 'full']} transition="background-color .2s ease" bg={bgColor} borderColor="inherit" rounded="lg" p="8">

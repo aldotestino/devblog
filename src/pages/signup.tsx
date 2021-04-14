@@ -11,6 +11,7 @@ import { useAuth } from '../store/User';
 import React, { useEffect } from 'react';
 import InputField from '../components/InputField';
 import { COLOR_SCHEME } from '../styles/theme';
+import SEO from '../components/SEO';
 
 const SIGNUP_MUTATION = gql`
   mutation SignupMutation($name: String!, $surname: String!, $email: String!, $username: String!, $password: String! $avatar: String) {
@@ -68,9 +69,7 @@ function Signup() {
 
   return (
     <>
-      <Head>
-        <title>devBlog - signup</title>
-      </Head>
+      <SEO title="devBlog - signup" description="Create a new account" />
 
       <Flex align="center" direction="column">
         <Box w={['xs', 'md']} border="1px" bg={bgColor} transition="background-color .2s ease" borderColor="inherit" rounded="lg" p="8">     

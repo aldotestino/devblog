@@ -1,7 +1,7 @@
 import { useQuery, gql, useMutation } from '@apollo/client';
 import { AddIcon, DeleteIcon, EditIcon } from '@chakra-ui/icons';
 import { Avatar, Box, Button, Flex, Heading, SimpleGrid, Stack, Text, useDisclosure, useToast } from '@chakra-ui/react';
-import { GetStaticPaths, GetStaticProps } from 'next';
+import { GetServerSideProps } from 'next';
 import Head from 'next/head';
 import Link from 'next/link';
 import React, { useMemo } from 'react';
@@ -14,9 +14,9 @@ import { UserQuery, UserQueryVariables } from '../__generated__/UserQuery';
 import { useRouter } from 'next/router';
 import { EditProfileMutation, EditProfileMutationVariables } from '../__generated__/EditProfileMutation';
 import { COLOR_SCHEME } from '../styles/theme';
-import prisma from '../lib/prisma';
 import { DeleteProfileMutation } from '../__generated__/DeleteProfileMutation';
 import ConfirmActionDialog from '../components/ConfirmActionDialog';
+import SEO from '../components/SEO';
 
 const USER_QUERY = gql`
   query UserQuery($username: String!) {
@@ -139,6 +139,8 @@ function UserProfile({ username } : UserPageProps) {
       <Head>
         <title>devBlog - {data.user.username}</title>
       </Head>
+
+      <SEO title={`devBlog - @${data.user.username}`} description={`${data.user.name} ${data.user.surname}`} image={data.user.avatar} />
       
       <EditProfileModal isLoading={loading} isOpen={isOpen} onClose={onClose} action={editProfileAction} />
       <ConfirmActionDialog primary="Delete" description="All of yuour posts, likes and comments will be permanently deleted. Are you sure you want to proceed" title="Delete profile" isOpen={dialogIsOpen} onClose={dialogOnClose} isLoading={deleteProfileLoading} action={deleteProfile} />
@@ -188,25 +190,12 @@ function UserProfile({ username } : UserPageProps) {
   );
 }
 
-export const getStaticPaths: GetStaticPaths = async () => {
-  const users = await prisma.user.findMany({
-    select: {
-      username: true
-    }
-  });
-
-  return {
-    paths: users.map(u => ({ params: { username: `@${u.username}` } })),
-    fallback: false
-  };
-};
-
-export const getStaticProps: GetStaticProps<unknown, {username: string}> = async (context) => {
+export const getServerSideProps: GetServerSideProps<unknown, {username: string}> = async (context) => {
   const apolloClient = initializeApollo();
 
   const username = context.params.username.substring(1);
 
-  await apolloClient.query<UserQuery, UserQueryVariables>({
+  const res = await apolloClient.query<UserQuery, UserQueryVariables>({
     query: USER_QUERY,
     variables: {
       username
@@ -218,6 +207,7 @@ export const getStaticProps: GetStaticProps<unknown, {username: string}> = async
       initialApolloState: apolloClient.cache.extract(),
       username
     },
+    notFound: !res.data.user
   };
 };
 
