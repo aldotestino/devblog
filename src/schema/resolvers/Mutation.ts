@@ -1,6 +1,5 @@
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { JWT_SECRET } from '../../utils/authHelpers';
 import { ResolverFunc } from '../../utils/types';
 import { LoginMutationVariables } from '../../__generated__/LoginMutation';
 import { SignupMutationVariables } from '../../__generated__/SignupMutation';
@@ -43,7 +42,7 @@ const login: ResolverFunc<unknown, LoginMutationVariables> = async (_, { passwor
     throw new Error('Wrong password');
   }
 
-  const token = jwt.sign(user.id, JWT_SECRET);
+  const token = jwt.sign(user.id, process.env.JWT_SECRET);
   
   return {
     token,

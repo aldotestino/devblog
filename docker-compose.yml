@@ -1,0 +1,30 @@
+version: "3"
+
+services:
+  web:
+    build: ./
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/devblog?schema=public
+    volumes: 
+      - ./:/usr/app/web
+      - /usr/app/web/node_modules
+    ports: 
+      - 3000:3000
+    container_name: devblog_web
+    depends_on:
+      - db
+
+  db:
+    image: postgres
+    volumes:
+      - ./database-data:/var/lib/postgresql/data/
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports: 
+      - 5432:5432
+    container_name: devblog_db
+
+volumes:
+  database-data:
+    name: devblog

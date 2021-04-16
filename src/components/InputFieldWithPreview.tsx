@@ -3,6 +3,7 @@ import { Field } from 'formik';
 import React from 'react';
 import Markdown from './Markdown';
 import { InputFieldProps } from './InputField';
+import { COLOR_SCHEME } from '../styles/theme';
 
 interface InputFiedldWitPreviewProps extends InputFieldProps {
   content: string
@@ -10,7 +11,7 @@ interface InputFiedldWitPreviewProps extends InputFieldProps {
 
 function InputFieldWithPreview({ isInvalid, errorMessage, content, type, placeholder, name }: InputFiedldWitPreviewProps) {
   return (
-    <Tabs colorScheme="indigo" variant="line" flex="1" isLazy>
+    <Tabs colorScheme={COLOR_SCHEME} variant="line" flex="1" isLazy>
       <TabList>
         <Tab>Content</Tab>
         <Tab>Preview</Tab>
