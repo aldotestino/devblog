@@ -1,7 +1,6 @@
 import { Box, Button, Flex, Heading, Stack, useBreakpointValue, useColorModeValue } from '@chakra-ui/react';
 import { Form, Formik } from 'formik';
 import { gql, useMutation } from '@apollo/client';
-import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 import { useAuth } from '../../store/User';

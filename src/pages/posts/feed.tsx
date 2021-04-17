@@ -1,7 +1,6 @@
 import { useQuery, gql } from '@apollo/client';
 import { Heading, SimpleGrid } from '@chakra-ui/react';
-import { GetServerSideProps, GetStaticProps } from 'next';
-import Head from 'next/head';
+import { GetServerSideProps } from 'next';
 import React from 'react';
 import PostCard from '../../components/PostCard';
 import SEO from '../../components/SEO';
