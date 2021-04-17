@@ -61,11 +61,8 @@ function CommentCard({ comment, removeFromUI }: CommentCardProps) {
         {isMe && <Menu>
           <MenuButton as={IconButton} rounded="full" variant="ghost" icon={<Icon w={6} h={6} as={DotsVerticalIcon} />} />
           <MenuList>
-            <MenuItem
-              icon={<DeleteIcon />}
-              onClick={() => deleteComment()}
-            >
-                    Delete
+            <MenuItem icon={<DeleteIcon />} onClick={() => deleteComment()}>
+              Delete
             </MenuItem>
           </MenuList>
         </Menu>}

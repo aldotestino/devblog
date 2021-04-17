@@ -9,13 +9,12 @@ import NProgress from 'nprogress';
 import '../styles/nprogress.css';
 import 'github-markdown-css';
 import { theme } from '../styles/theme';
+import { AppProps } from 'next/dist/next-server/lib/router/router';
 
 NProgress.configure({ showSpinner: false });
 
-// eslint-disable-next-line react/prop-types
-function App({ Component, pageProps }) {
+function App({ Component, pageProps }: AppProps) {
 
-  // eslint-disable-next-line react/prop-types
   const client = useApollo(pageProps.initialApolloState);
 
   const router = useRouter();

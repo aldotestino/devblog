@@ -7,7 +7,11 @@ const posts: ResolverFunc<User, unknown> = ({ id }) => {
     where: {
       id
     }
-  }).posts();
+  }).posts({
+    orderBy: {
+      createdAt: 'desc'
+    }
+  });
 };
 
 const comments: ResolverFunc<User, unknown> = ({ id } ) => {

@@ -2,7 +2,6 @@ import { useQuery, gql, useMutation } from '@apollo/client';
 import { AddIcon, DeleteIcon, EditIcon } from '@chakra-ui/icons';
 import { Avatar, Box, Button, Flex, Heading, SimpleGrid, Stack, Text, useDisclosure, useToast } from '@chakra-ui/react';
 import { GetServerSideProps } from 'next';
-import Head from 'next/head';
 import Link from 'next/link';
 import React, { useMemo } from 'react';
 import PostCard from '../components/PostCard';
@@ -136,14 +135,10 @@ function UserProfile({ username } : UserPageProps) {
 
   return(
     <>
-      <Head>
-        <title>devBlog - {data.user.username}</title>
-      </Head>
-
       <SEO title={`devBlog - @${data.user.username}`} description={`${data.user.name} ${data.user.surname}`} image={data.user.avatar} />
       
       <EditProfileModal isLoading={loading} isOpen={isOpen} onClose={onClose} action={editProfileAction} />
-      <ConfirmActionDialog primary="Delete" description="All of yuour posts, likes and comments will be permanently deleted. Are you sure you want to proceed" title="Delete profile" isOpen={dialogIsOpen} onClose={dialogOnClose} isLoading={deleteProfileLoading} action={deleteProfile} />
+      <ConfirmActionDialog primary="Delete" description="All of yuour posts, likes and comments will be permanently deleted. Are you sure you want to proceed" title="Delete profile" isOpen={dialogIsOpen} onClose={dialogOnClose} isLoading={deleteProfileLoading} action={deleteProfile} /> 
       <Stack spacing="10" direction={['column', 'column', 'row']}>
         <Box w={['full', 'full', 'lg']}>
           <Flex>

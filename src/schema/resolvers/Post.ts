@@ -16,7 +16,11 @@ const comments: ResolverFunc<Post, unknown> = ({ id } ) => {
     where: {
       id
     }
-  }).comments();
+  }).comments({
+    orderBy: {
+      createdAt: 'desc'
+    }
+  });
 };
 
 const likes: ResolverFunc<Post, unknown> = ({ id } ) => {

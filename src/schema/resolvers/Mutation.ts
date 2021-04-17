@@ -123,7 +123,7 @@ const deletePost: ResolverFunc<unknown, DeletePostMutationVariables> = async (_,
   // Executing a raw sql command
   // prisma cannot delete on cascade for now
   await prisma.$executeRaw`
-    DELETE FROM Post WHERE id=${postId};
+    DELETE FROM "Post" WHERE id=${postId};
   `;
 
   return true;
@@ -171,7 +171,7 @@ const editPost: ResolverFunc<unknown, EditPostMutationVariables> = async (_, { p
 const deleteProfile: ResolverFunc<unknown, unknown> = async (_, __, { userId }) => {
   
   await prisma.$executeRaw`
-    DELETE FROM User WHERE id=${userId};
+    DELETE FROM "User" WHERE id=${userId};
   `;
 
   return true;

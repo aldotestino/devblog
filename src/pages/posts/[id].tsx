@@ -12,7 +12,6 @@ import { HeartIcon as OutlineHeart } from '@heroicons/react/outline';
 import { useAuth } from '../../store/User';
 import { LikeMutation, LikeMutationVariables } from '../../__generated__/LikeMutation';
 import LikesBox from '../../components/LikesBox';
-import Head from 'next/head';
 import { DeletePostMutation, DeletePostMutationVariables } from '../../__generated__/DeletePostMutation';
 import { useRouter } from 'next/router';
 import EditPostModal from '../../components/EditPostModal';
@@ -113,6 +112,14 @@ function Post({ id }: PostProps) {
     },
     onCompleted: ({ deletePost }) => {
       if(deletePost) {
+        toast({
+          title: 'Delete post',
+          description: 'Post deleted succesfully',
+          status: 'info',
+          duration: 3000,
+          position: 'top-right',
+          isClosable: true
+        });
         router.push(`/@${user.username}`);
       }
     }
