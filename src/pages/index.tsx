@@ -6,16 +6,15 @@ import HomeImage from '../svg/HomeImage';
 import SEO from '../components/SEO';
 
 function Home() {
+
   return (
     <>
       <SEO title="devBlog" description="The Blog for Developers" />
 
       <Stack direction={['column', 'column', 'row']} spacing={['10', '10', '10']}>
         <Box textAlign={['center', 'center', 'left']}>
-          <Heading fontSize="6xl" w="auto">
-            <Box bgGradient="linear(to-l, #7928CA, #FF0080)" bgClip="text">
-              The Blog for Developers
-            </Box>
+          <Heading fontSize="6xl" bgGradient="linear(to-r, indigo.600, red.400)" bgClip="text">
+            The Blog for Developers
           </Heading>
           <Text fontSize="2xl" maxW="xl">
             The perfect place to share yuor thoughts, interests and experiences with the newest technologies in web developement and not only!

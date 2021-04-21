@@ -11,25 +11,25 @@ interface InputFiedldWitPreviewProps extends InputFieldProps {
 
 function InputFieldWithPreview({ isInvalid, errorMessage, content, type, placeholder, name }: InputFiedldWitPreviewProps) {
   return (
-    <Tabs colorScheme={COLOR_SCHEME} variant="line" flex="1" isLazy>
+    <Tabs colorScheme={COLOR_SCHEME} variant="soft-rounded" flex="1" isLazy>
       <TabList>
-        <Tab>Content</Tab>
+        <Tab>Write</Tab>
         <Tab>Preview</Tab>
       </TabList>
       <TabPanels>
-        <TabPanel>
+        <TabPanel px="0">
           <Field name={name}>
             {({ field }) => 
               <FormControl isInvalid={isInvalid}>
-                <Textarea {...field} h="xs" type={type} placeholder={placeholder} id={name} />
+                <Textarea {...field} focusBorderColor={`${COLOR_SCHEME}.400`} h="xs" type={type} placeholder={placeholder} id={name} />
                 <FormErrorMessage>{errorMessage}</FormErrorMessage>
               </FormControl>}
           </Field>
         </TabPanel>
-        <TabPanel>
-          <Box bg="white" p="4" rounded="md" border="1px" borderColor="inherit" shadow="md">
+        <TabPanel px="0">
+          {content && <Box bg="white" p="4" rounded="md" border="1px" borderColor="inherit" shadow="md">
             <Markdown content={content} />
-          </Box>
+          </Box>}
         </TabPanel>
       </TabPanels>
     </Tabs>

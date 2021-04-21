@@ -1,6 +1,7 @@
 import { FormControl, FormErrorMessage, FormLabel, Input, InputGroup, InputLeftElement, Textarea } from '@chakra-ui/react';
 import { Field } from 'formik';
 import React, { ReactNode } from 'react';
+import { COLOR_SCHEME } from '../styles/theme';
 
 export interface InputFieldProps {
   name: string
@@ -25,13 +26,13 @@ function InputField({ name, isInvalid, label, type, placeholder, errorMessage, i
         <FormControl isInvalid={isInvalid}>
           {label && <FormLabel>{label}</FormLabel>}
           {!icon ? 
-            <InputElement isDisabled={isDisabled} {...field} type={type} placeholder={placeholder} id={name} /> 
+            <InputElement focusBorderColor={`${COLOR_SCHEME}.400`} isDisabled={isDisabled} {...field} type={type} placeholder={placeholder} id={name} /> 
             : 
             <InputGroup>
               <InputLeftElement >
                 {icon}
               </InputLeftElement>
-              <InputElement {...field} isDisabled={isDisabled} type={type}placeholder={placeholder} id={name} />
+              <InputElement {...field} focusBorderColor={`${COLOR_SCHEME}.400`} isDisabled={isDisabled} type={type}placeholder={placeholder} id={name} />
             </InputGroup>
           }
           <FormErrorMessage>{errorMessage}</FormErrorMessage>

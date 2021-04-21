@@ -24,3 +24,5 @@ or with older version
 ```sh
 docker-compose up
 ```
+
+Site will be available at http://devblog.localhost
