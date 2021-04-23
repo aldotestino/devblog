@@ -4,10 +4,12 @@ import { DotsVerticalIcon } from '@heroicons/react/outline';
 import Link from 'next/link';
 import React, { useMemo } from 'react';
 import { useAuth } from '../store/User';
-import { PostQuery_post_comments } from '../__generated__/PostQuery';
+import { PostQuery, PostQueryVariables, PostQuery_post_comments } from '../__generated__/PostQuery';
 import { gql, useMutation } from '@apollo/client';
 import { DeleteCommentMutation, DeleteCommentMutationVariables } from '../__generated__/DeleteCommentMutation';
 import { COLOR_SCHEME } from '../styles/theme';
+import { POST_QUERY } from '../pages/posts/[id]';
+import dateFormat from '../utils/dateFormat';
 
 const DELETE_COMMENT_MUTATION = gql`
   mutation DeleteCommentMutation($commentId: ID!) {
@@ -17,10 +19,10 @@ const DELETE_COMMENT_MUTATION = gql`
 
 interface CommentCardProps {
   comment: PostQuery_post_comments,
-  removeFromUI: (commentId: string) => void
+  postId: string
 }
 
-function CommentCard({ comment, removeFromUI }: CommentCardProps) {
+function CommentCard({ comment, postId }: CommentCardProps) {
 
   const { isAuth, user } = useAuth();
   const bgColor = useColorModeValue('white', 'gray.700');
@@ -34,10 +36,25 @@ function CommentCard({ comment, removeFromUI }: CommentCardProps) {
     variables: {
       commentId: comment.id
     },
-    onCompleted: ({ deleteComment }) => {
-      if(deleteComment) {
-        removeFromUI(comment.id);
-      }
+    update: (cache) => {
+      const { post } = cache.readQuery<PostQuery, PostQueryVariables>({
+        query: POST_QUERY,
+        variables: {
+          id: postId
+        }
+      });
+      cache.writeQuery<PostQuery, PostQueryVariables>({
+        query: POST_QUERY,
+        variables: {
+          id: postId
+        },
+        data: {
+          post: {
+            ...post,
+            comments: post.comments.filter(({ id }) => id !== comment.id)
+          }  
+        }
+      });
     }
   });
 
@@ -54,7 +71,7 @@ function CommentCard({ comment, removeFromUI }: CommentCardProps) {
                 </CLink>
               </Link>
               <br/>
-              {new Date(comment.createdAt).toLocaleDateString()}
+              {dateFormat(comment.createdAt)}
             </Text>
           </Box>
         </Flex>

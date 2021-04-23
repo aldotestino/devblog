@@ -22,7 +22,17 @@ function createApolloClient() {
   return new ApolloClient({
     ssrMode: typeof window === 'undefined',
     link: createIsomorphLink(),
-    cache: new InMemoryCache(),
+    cache: new InMemoryCache({
+      typePolicies: {
+        Post: {
+          fields: {
+            comments: {
+              merge: false // manually managing comments updates
+            }
+          }
+        }
+      }
+    }),
   });
 }
 

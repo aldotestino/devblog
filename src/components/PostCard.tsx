@@ -6,6 +6,7 @@ import { UserQuery_user_posts } from '../__generated__/UserQuery';
 import LikesBox from './LikesBox';
 import { FeedQuery_feed, FeedQuery_feed_user } from '../__generated__/FeedQuery';
 import { COLOR_SCHEME } from '../styles/theme';
+import dateFormat from '../utils/dateFormat';
 
 interface PostCardProps {
   post: UserQuery_user_posts | FeedQuery_feed
@@ -17,7 +18,7 @@ function PostCard({ post, user }: PostCardProps) {
   const bgColor = useColorModeValue('white', 'gray.700');
 
   return (
-    <LinkBox cursor="pointer" border="1px" h="fit-content" transition="all .2s ease" _hover={{ transform: 'scale(1.01)', borderColor: `${COLOR_SCHEME}.400` }} bgColor={bgColor} borderColor="inherit" rounded="lg" p="4" shadow="md">
+    <LinkBox cursor="pointer" border="1px" transition="all .2s ease" _hover={{ transform: 'scale(1.01)', borderColor: `${COLOR_SCHEME}.400` }} bgColor={bgColor} borderColor="inherit" rounded="lg" p="4" shadow="md">
       <Flex align="center">
         <Heading size="lg">
           <Link href={`/posts/${post.id}`} passHref>
@@ -41,10 +42,10 @@ function PostCard({ post, user }: PostCardProps) {
                 </CLink>
               </Link>
             </Text>
-            <Text fontSize="base">Posted on {new Date(post.createdAt).toLocaleDateString()}</Text>
+            <Text fontSize="base">Posted on {dateFormat(post.createdAt)}</Text>
           </Box>
         </Stack>}
-      {!user && <Text>Posted on {new Date(post.createdAt).toLocaleDateString()}</Text>}
+      {!user && <Text>Posted on {dateFormat(post.createdAt)}</Text>}
       <LikesBox borderColor={bgColor} likes={post.likes} />
     </LinkBox>
   );

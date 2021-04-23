@@ -19,8 +19,9 @@ import { EditPostMutation, EditPostMutationVariables } from '../../__generated__
 import Markdown from '../../components/Markdown';
 import { COLOR_SCHEME } from '../../styles/theme';
 import SEO from '../../components/SEO';
+import dateFormat from '../../utils/dateFormat';
 
-const POST_QUERY = gql` 
+export const POST_QUERY = gql` 
   query PostQuery($id: ID!) {
     post(id: $id) {
       id
@@ -204,7 +205,7 @@ function Post({ id }: PostProps) {
                     </CLink>
                   </Link> 
                 </Text>
-                <Text>Posted on {new Date(post.createdAt).toLocaleDateString()}</Text>
+                <Text>Posted on {dateFormat(post.createdAt)}</Text>
               </Box>
             </Flex>
             <Menu>

@@ -1,13 +1,14 @@
 import { Box, Button, Flex, Stack, useToast } from '@chakra-ui/react';
 import { Form, Formik } from 'formik';
-import React, { useState } from 'react';
+import React from 'react';
 import { useMutation, gql } from '@apollo/client';
-import { PostQuery_post_comments } from '../__generated__/PostQuery';
+import { PostQuery, PostQueryVariables, PostQuery_post_comments } from '../__generated__/PostQuery';
 import { CommentMutation, CommentMutationVariables } from '../__generated__/CommentMutation';
 import { useAuth } from '../store/User';
 import CommentCard from './CommentCard';
 import InputField from './InputField';
 import { COLOR_SCHEME } from '../styles/theme';
+import { POST_QUERY } from '../pages/posts/[id]';
 
 const COMMENT_MUTATION = gql`
   mutation CommentMutation($content: String!, $postId: ID!) {
@@ -31,7 +32,6 @@ interface CommentBoxProps {
 function CommentBox({ postId, comments }: CommentBoxProps) {
 
   const { isAuth, user } = useAuth();
-  const [updatedComments, setUpdatedComments] = useState<PostQuery_post_comments[]>(comments);
   const toast = useToast();
 
   const [comment, { loading }] = useMutation<CommentMutation, CommentMutationVariables>(COMMENT_MUTATION, {
@@ -40,7 +40,14 @@ function CommentBox({ postId, comments }: CommentBoxProps) {
         authorization: user?.token
       }
     },
-    onCompleted: ({ comment }) => {
+    update: (cache, { data: { comment } }) => {
+      // read the post query
+      const { post } = cache.readQuery<PostQuery, PostQueryVariables>({
+        query: POST_QUERY,
+        variables: {
+          id: postId
+        }
+      });
       const newComment: PostQuery_post_comments = {
         ...comment,
         user: {
@@ -50,13 +57,21 @@ function CommentBox({ postId, comments }: CommentBoxProps) {
           avatar: user.avatar
         }
       };
-      setUpdatedComments(prevComments => [newComment, ...prevComments]);
-    }
+      // add `newComment` to the comments array of the post
+      cache.writeQuery<PostQuery, PostQueryVariables>({
+        query: POST_QUERY,
+        variables: {
+          id: postId
+        },
+        data: {
+          post: {
+            ...post,
+            comments: [newComment, ...post.comments]
+          }  
+        }
+      });
+    },
   });
-
-  function removeFromUI(commentId: string) {
-    setUpdatedComments(prevComments => prevComments.filter(({ id }) => id !== commentId));
-  }
 
   return(
     <Box mt="4">
@@ -94,7 +109,7 @@ function CommentBox({ postId, comments }: CommentBoxProps) {
           </Form>}
       </Formik>
       <Stack mt="4" spacing="4">
-        {updatedComments.map(c => <CommentCard removeFromUI={removeFromUI} comment={c} key={c.id} />)}
+        {comments.map(c => <CommentCard postId={postId} comment={c} key={c.id} />)}
       </Stack>
     </Box>
   );
