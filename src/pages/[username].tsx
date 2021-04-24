@@ -7,7 +7,7 @@ import React, { useMemo } from 'react';
 import PostCard from '../components/PostCard';
 import EditProfileModal from '../components/EditProfileModal';
 import { InboxIcon } from '@heroicons/react/outline';
-import { useAuth } from '../store/User';
+import { useAuth } from '../store/Auth';
 import { initializeApollo } from '../utils/apolloConfig';
 import { UserQuery, UserQueryVariables } from '../__generated__/UserQuery';
 import { useRouter } from 'next/router';

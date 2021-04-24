@@ -3,7 +3,7 @@ import { Box, Text, Flex, Avatar, Link as CLink, useColorModeValue, Menu, MenuBu
 import { DotsVerticalIcon } from '@heroicons/react/outline';
 import Link from 'next/link';
 import React, { useMemo } from 'react';
-import { useAuth } from '../store/User';
+import { useAuth } from '../store/Auth';
 import { PostQuery, PostQueryVariables, PostQuery_post_comments } from '../__generated__/PostQuery';
 import { gql, useMutation } from '@apollo/client';
 import { DeleteCommentMutation, DeleteCommentMutationVariables } from '../__generated__/DeleteCommentMutation';

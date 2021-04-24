@@ -6,7 +6,7 @@ import { Formik, Form } from 'formik';
 import { validateSignupVariables } from '../utils/authHelpers';
 import { gql, useMutation } from '@apollo/client';
 import { SignupMutationVariables, SignupMutation } from '../__generated__/SignupMutation';
-import { useAuth } from '../store/User';
+import { useAuth } from '../store/Auth';
 import React, { useEffect } from 'react';
 import InputField from '../components/InputField';
 import { COLOR_SCHEME } from '../styles/theme';

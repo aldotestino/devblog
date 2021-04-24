@@ -4,7 +4,7 @@ import React from 'react';
 import { useMutation, gql } from '@apollo/client';
 import { PostQuery, PostQueryVariables, PostQuery_post_comments } from '../__generated__/PostQuery';
 import { CommentMutation, CommentMutationVariables } from '../__generated__/CommentMutation';
-import { useAuth } from '../store/User';
+import { useAuth } from '../store/Auth';
 import CommentCard from './CommentCard';
 import InputField from './InputField';
 import { COLOR_SCHEME } from '../styles/theme';

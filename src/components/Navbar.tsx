@@ -3,7 +3,7 @@ import { Stack, Flex, Heading, Button, Menu, MenuItem, MenuButton, MenuList, Men
 import { LogoutIcon } from '@heroicons/react/outline';
 import Link from 'next/link';
 import React from 'react';
-import { useAuth } from '../store/User';
+import { useAuth } from '../store/Auth';
 import { COLOR_SCHEME } from '../styles/theme';
 
 function Navbar() {

@@ -16,7 +16,7 @@ function Home() {
           <Heading fontSize="6xl" bgGradient="linear(to-r, indigo.600, red.400)" bgClip="text">
             The Blog for Developers
           </Heading>
-          <Text fontSize="2xl" maxW="xl">
+          <Text fontSize="2xl" maxW={['full', 'full', 'xl']}>
             The perfect place to share yuor thoughts, interests and experiences with the newest technologies in web developement and not only!
             Share your code thanks to the powerful markdown & code renderer for your posts.
           </Text>

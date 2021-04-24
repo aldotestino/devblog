@@ -28,8 +28,17 @@ const feed: ResolverFunc<unknown, unknown> = () => {
   });
 };
 
+const me: ResolverFunc<unknown, unknown> = (_, __, { userId }) => {
+  return userId ? prisma.user.findUnique({
+    where: {
+      id: userId
+    }
+  }) : null;
+};
+
 export {
   user,
   post,
-  feed
+  feed,
+  me
 };

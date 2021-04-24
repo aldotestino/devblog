@@ -3,7 +3,7 @@ import { Form, Formik } from 'formik';
 import { gql, useMutation } from '@apollo/client';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
-import { useAuth } from '../../store/User';
+import { useAuth } from '../../store/Auth';
 import { PostMutation, PostMutationVariables } from '../../__generated__/PostMutation';
 import InputField from '../../components/InputField';
 import InputFieldWithPreview from '../../components/InputFieldWithPreview';

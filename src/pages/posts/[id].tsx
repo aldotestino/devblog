@@ -9,7 +9,7 @@ import Link from 'next/link';
 import CommentBox from '../../components/CommentsBox';
 import { HeartIcon as FullHeart, DotsVerticalIcon } from '@heroicons/react/solid';
 import { HeartIcon as OutlineHeart } from '@heroicons/react/outline';
-import { useAuth } from '../../store/User';
+import { useAuth } from '../../store/Auth';
 import { LikeMutation, LikeMutationVariables } from '../../__generated__/LikeMutation';
 import LikesBox from '../../components/LikesBox';
 import { DeletePostMutation, DeletePostMutationVariables } from '../../__generated__/DeletePostMutation';

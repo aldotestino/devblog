@@ -2,7 +2,7 @@ import { AtSignIcon, ViewIcon } from '@chakra-ui/icons';
 import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, Button, ModalProps, Stack } from '@chakra-ui/react';
 import { Form, Formik } from 'formik';
 import React from 'react';
-import { useAuth } from '../store/User';
+import { useAuth } from '../store/Auth';
 import { COLOR_SCHEME } from '../styles/theme';
 import { validateEditProfileVariables } from '../utils/authHelpers';
 import { EditProfileMutationVariables } from '../__generated__/EditProfileMutation';

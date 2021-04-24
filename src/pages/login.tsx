@@ -1,11 +1,11 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React, { useEffect } from 'react';
-import { Stack, Text, Button, Flex, Box, Heading, Link as CLink, useToast, useColorModeValue } from '@chakra-ui/react';
+import React, { useEffect, useState } from 'react';
+import { Stack, Text, Button, Flex, Box, Heading, Link as CLink, useToast, useColorModeValue, Checkbox } from '@chakra-ui/react';
 import { LockIcon, AtSignIcon } from '@chakra-ui/icons';
 import { Formik, Form } from 'formik';
 import { validateLoginVariables } from '../utils/authHelpers';
-import { useAuth } from '../store/User';
+import { useAuth } from '../store/Auth';
 import { gql, useMutation } from '@apollo/client';
 import { LoginMutation, LoginMutationVariables } from '../__generated__/LoginMutation';
 import InputField from '../components/InputField';
@@ -37,6 +37,7 @@ function Login() {
 
   const toast = useToast();
   const router = useRouter();
+  const [rememberMe, setRememberMe] = useState(false);
   const { setUser, isAuth } = useAuth();
   const [login, { loading }] = useMutation<LoginMutation, LoginMutationVariables>(LOGIN_MUTATION, {
     onCompleted: ({ login: { user, token } }) => {
@@ -44,6 +45,9 @@ function Login() {
         ...user,
         token
       });
+      if(rememberMe) {
+        localStorage.setItem('token', token);
+      }
       router.push(`/@${user.username}`);
     },
     onError: (e) => {
@@ -88,6 +92,7 @@ function Login() {
                 <Stack spacing="6">
                   <InputField name="username" icon={<AtSignIcon />} errorMessage={formik.errors.username} placeholder="Username" type="text" isInvalid={formik.touched.username && !!formik.errors.username} />
                   <InputField name="password" icon={<LockIcon />} errorMessage={formik.errors.password} placeholder="Password" type="password" isInvalid={formik.touched.password && !!formik.errors.password} />
+                  <Checkbox isChecked={rememberMe} onChange={(e) => setRememberMe(e.target.checked)} colorScheme={COLOR_SCHEME}>Remember me</Checkbox>
                   <Button type="submit" colorScheme={COLOR_SCHEME} isLoading={loading}>Login</Button>
                   <Text>Don't have an account?&nbsp;          
                     <Link href="/signup" passHref>
