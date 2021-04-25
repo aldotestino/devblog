@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { Stack, Text, Button, Flex, Box, Heading, Link as CLink, useToast, useColorModeValue, Checkbox } from '@chakra-ui/react';
-import { LockIcon, AtSignIcon } from '@chakra-ui/icons';
+import { AtSymbolIcon, KeyIcon } from '@heroicons/react/outline';
 import { Formik, Form } from 'formik';
 import { validateLoginVariables } from '../utils/authHelpers';
 import { useAuth } from '../store/Auth';
@@ -90,8 +90,8 @@ function Login() {
             {formik => 
               <Form>
                 <Stack spacing="6">
-                  <InputField name="username" icon={<AtSignIcon />} errorMessage={formik.errors.username} placeholder="Username" type="text" isInvalid={formik.touched.username && !!formik.errors.username} />
-                  <InputField name="password" icon={<LockIcon />} errorMessage={formik.errors.password} placeholder="Password" type="password" isInvalid={formik.touched.password && !!formik.errors.password} />
+                  <InputField name="username" icon={AtSymbolIcon} errorMessage={formik.errors.username} placeholder="Username" type="text" isInvalid={formik.touched.username && !!formik.errors.username} />
+                  <InputField name="password" icon={KeyIcon} errorMessage={formik.errors.password} placeholder="Password" type="password" isInvalid={formik.touched.password && !!formik.errors.password} />
                   <Checkbox isChecked={rememberMe} onChange={(e) => setRememberMe(e.target.checked)} colorScheme={COLOR_SCHEME}>Remember me</Checkbox>
                   <Button type="submit" colorScheme={COLOR_SCHEME} isLoading={loading}>Login</Button>
                   <Text>Don't have an account?&nbsp;          

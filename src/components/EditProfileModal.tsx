@@ -1,4 +1,4 @@
-import { AtSignIcon, ViewIcon } from '@chakra-ui/icons';
+import { AtSymbolIcon, PhotographIcon } from '@heroicons/react/outline';
 import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, Button, ModalProps, Stack } from '@chakra-ui/react';
 import { Form, Formik } from 'formik';
 import React from 'react';
@@ -47,8 +47,8 @@ function EditProfileModal({ isOpen, onClose, action, isLoading }: EditProfileMod
                       <InputField name="name" placeholder="Name" errorMessage={formik.errors.name} type="text" isInvalid={formik.touched.name && !!formik.errors.name} />
                       <InputField name="surname" placeholder="Surname" errorMessage={formik.errors.surname} type="text" isInvalid={formik.touched.surname && !!formik.errors.surname} />
                     </Stack>
-                    <InputField name="username" icon={<AtSignIcon />} errorMessage={formik.errors.username} placeholder="Username" type="text" isInvalid={formik.touched.username && !!formik.errors.username} />
-                    <InputField name="avatar" icon={<ViewIcon />} placeholder="Avatar" errorMessage={formik.errors.avatar} type="text" isInvalid={formik.touched.avatar && !!formik.errors.avatar} />
+                    <InputField name="username" icon={AtSymbolIcon} errorMessage={formik.errors.username} placeholder="Username" type="text" isInvalid={formik.touched.username && !!formik.errors.username} />
+                    <InputField name="avatar" icon={PhotographIcon} placeholder="Avatar" errorMessage={formik.errors.avatar} type="text" isInvalid={formik.touched.avatar && !!formik.errors.avatar} />
                   </Stack>
                 </ModalBody>
                 <ModalFooter>

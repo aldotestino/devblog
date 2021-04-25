@@ -1,12 +1,11 @@
 import { useQuery, gql, useMutation } from '@apollo/client';
-import { AddIcon, DeleteIcon, EditIcon } from '@chakra-ui/icons';
-import { Avatar, Box, Button, Flex, Heading, SimpleGrid, Stack, Text, useDisclosure, useToast } from '@chakra-ui/react';
+import { Avatar, Box, Button, Flex, Heading, Icon, SimpleGrid, Stack, Text, useDisclosure, useToast } from '@chakra-ui/react';
 import { GetServerSideProps } from 'next';
 import Link from 'next/link';
 import React, { useMemo } from 'react';
 import PostCard from '../components/PostCard';
 import EditProfileModal from '../components/EditProfileModal';
-import { InboxIcon } from '@heroicons/react/outline';
+import { InboxIcon, PlusIcon, PencilAltIcon, TrashIcon } from '@heroicons/react/outline';
 import { useAuth } from '../store/Auth';
 import { initializeApollo } from '../utils/apolloConfig';
 import { UserQuery, UserQueryVariables } from '../__generated__/UserQuery';
@@ -158,14 +157,14 @@ function UserProfile({ username } : UserPageProps) {
           {isMe && 
             <SimpleGrid mt="4" columns={3} gap="3" >
               <Link href="/posts/create" passHref>
-                <Button variant="outline" as="a" colorScheme={COLOR_SCHEME} leftIcon={<AddIcon />}>
+                <Button variant="outline" as="a" colorScheme={COLOR_SCHEME} leftIcon={<Icon as={PlusIcon} w="4" h="4" />}>
                   Post        
                 </Button>
               </Link>       
-              <Button variant="outline" colorScheme={COLOR_SCHEME} onClick={onOpen} leftIcon={<EditIcon />}>
+              <Button variant="outline" colorScheme={COLOR_SCHEME} onClick={onOpen} leftIcon={<Icon as={PencilAltIcon} w="4" h="4" />}>
                 Edit
               </Button>
-              <Button variant="outline" colorScheme="red" onClick={dialogOnOpen} leftIcon={<DeleteIcon />}>
+              <Button variant="outline" colorScheme="red" onClick={dialogOnOpen} leftIcon={<Icon as={TrashIcon} w="4" h="4" />}>
                 Delete
               </Button>
             </SimpleGrid>}
@@ -173,7 +172,7 @@ function UserProfile({ username } : UserPageProps) {
         <Flex flex="1" justify="center">
           {data.user.posts.length === 0 ? 
             <Flex direction="column" align="center">
-              <InboxIcon />
+              <Icon as={InboxIcon} w="40" h="40" />
               <Text mt="4" fontSize="2xl" fontStyle="italic">No posts yet...</Text>
             </Flex>
             : <Stack spacing="4" w="full">

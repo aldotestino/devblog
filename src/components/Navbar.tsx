@@ -1,6 +1,6 @@
-import { AddIcon, ChevronDownIcon, MoonIcon, SunIcon } from '@chakra-ui/icons';
+import { ChevronDownIcon } from '@chakra-ui/icons';
 import { Stack, Flex, Heading, Button, Menu, MenuItem, MenuButton, MenuList, MenuDivider, Avatar, Text, useColorMode, useColorModeValue, Switch, LinkOverlay, Icon } from '@chakra-ui/react';
-import { LogoutIcon } from '@heroicons/react/outline';
+import { LogoutIcon, PlusIcon, SunIcon, MoonIcon } from '@heroicons/react/outline';
 import Link from 'next/link';
 import React from 'react';
 import { useAuth } from '../store/Auth';
@@ -56,15 +56,15 @@ function Navbar() {
                 </MenuItem>
               </Link>
               <MenuDivider />
-              <MenuItem icon={<ThemeIcon />} onClick={toggleColorMode}>   
+              <MenuItem icon={<Icon as={ThemeIcon} h="4" w="4" />} onClick={toggleColorMode}>   
                 Use {theme} mode
               </MenuItem>
               <Link href="/posts/create" passHref>   
-                <MenuItem as="a" icon={<AddIcon />}>
+                <MenuItem as="a" icon={<Icon as={PlusIcon} h="4" w="4"  />}>
                   New Post
                 </MenuItem>
               </Link>
-              <MenuItem onClick={logout} icon={<Icon as={LogoutIcon} />}>
+              <MenuItem onClick={logout} icon={<Icon as={LogoutIcon} h="4" w="4" />}>
                 Logout
               </MenuItem>
             </MenuList>

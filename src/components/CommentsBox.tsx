@@ -78,17 +78,6 @@ function CommentBox({ postId, comments }: CommentBoxProps) {
       <Formik
         initialValues={initialValues}
         onSubmit={(variables, { resetForm }) => {
-          if(!isAuth) {
-            toast({
-              title: 'Comment post',
-              description: 'You have to login to comment',
-              status: 'error',
-              duration: 3000,
-              position: 'top-right',
-              isClosable: true
-            });
-            return;
-          }
           comment({
             variables: {
               content: variables.content.trim(),

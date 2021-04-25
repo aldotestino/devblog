@@ -1,14 +1,13 @@
 import { gql, useMutation, useQuery } from '@apollo/client';
 import { GetServerSideProps } from 'next';
 import React, { useMemo, useState } from 'react';
-import { DeleteIcon, EditIcon, LinkIcon } from '@chakra-ui/icons';
-import { Avatar, Box, Flex, Heading, Text, Link as CLink, Stack, useToast, useBreakpointValue, Menu, MenuButton, MenuList, MenuItem, IconButton, Icon, useDisclosure, useColorModeValue } from '@chakra-ui/react';
+import { Avatar, Box, Flex, Heading, Text, Link as CLink, Stack, useToast, useBreakpointValue, Menu, MenuButton, MenuList, MenuItem, IconButton, Icon, useDisclosure, useColorModeValue, Tooltip } from '@chakra-ui/react';
 import { initializeApollo } from '../../utils/apolloConfig';
-import { PostQuery, PostQueryVariables } from '../../__generated__/PostQuery';
+import { PostQuery, PostQueryVariables, PostQuery_post_likes } from '../../__generated__/PostQuery';
 import Link from 'next/link';
 import CommentBox from '../../components/CommentsBox';
 import { HeartIcon as FullHeart, DotsVerticalIcon } from '@heroicons/react/solid';
-import { HeartIcon as OutlineHeart } from '@heroicons/react/outline';
+import { HeartIcon as OutlineHeart, PencilAltIcon, TrashIcon, ShareIcon } from '@heroicons/react/outline';
 import { useAuth } from '../../store/Auth';
 import { LikeMutation, LikeMutationVariables } from '../../__generated__/LikeMutation';
 import LikesBox from '../../components/LikesBox';
@@ -91,12 +90,62 @@ function Post({ id }: PostProps) {
     }
   });
   const { isAuth, user } = useAuth(); 
-  const [isLiked, setIsLiked] = useState(post.likes.some(l => l.user.id === user?.id));
+  const isLiked =  post.likes.some(l => l.user.id === user?.id);
   const [like] = useMutation<LikeMutation, LikeMutationVariables>(LIKE_MUTATION, {
     context: {
       headers: {
         authorization: user?.token
       }
+    },
+    update: (cache, { data: { like } }) => {
+      const { post } = cache.readQuery<PostQuery, PostQueryVariables>({
+        query: POST_QUERY,
+        variables: {
+          id
+        }
+      });
+
+      // if you have unliked remove the like
+      if(!like) {
+        cache.writeQuery<PostQuery, PostQueryVariables>({
+          query: POST_QUERY,
+          variables: {
+            id
+          },
+          data: {
+            post: {
+              ...post,
+              likes: post.likes.filter(l => l.user.id !== user.id)
+            }  
+          }
+        });
+
+        return;
+      }
+
+      // otherwise update the cache adding your like
+      const newLike: PostQuery_post_likes = {
+        __typename: 'Like',
+        user: {
+          __typename: 'User',
+          id: user.id,
+          username: user.username,
+          avatar: user.avatar
+        }
+      };
+
+      cache.writeQuery<PostQuery, PostQueryVariables>({
+        query: POST_QUERY,
+        variables: {
+          id
+        },
+        data: {
+          post: {
+            ...post,
+            likes: [...post.likes, newLike]
+          }  
+        }
+      });
     }
   });
 
@@ -131,18 +180,6 @@ function Post({ id }: PostProps) {
   const LikeButton = isLiked ? FullHeart : OutlineHeart;
 
   function handleLike() {
-    if(!isAuth) {
-      toast({
-        title: 'Like post',
-        description: 'You have to login to like',
-        status: 'error',
-        duration: 3000,
-        position: 'top-right',
-        isClosable: true
-      });
-      return;
-    }
-    setIsLiked(pL => !pL);
     like({
       variables: {
         postId: id
@@ -156,11 +193,31 @@ function Post({ id }: PostProps) {
         authorization: user?.token
       }
     },
-    onCompleted: ({ editPost }) => {
-      if(editPost) {
-        onClose();
-        refetch();
-      }
+    onCompleted: () => {
+      onClose();
+    },
+    update: (cache, { data: { editPost } }) => {
+      const { post } = cache.readQuery<PostQuery, PostQueryVariables>({
+        query: POST_QUERY,
+        variables: {
+          id
+        }
+      });
+
+      cache.writeQuery<PostQuery, PostQueryVariables>({
+        query: POST_QUERY,
+        variables: {
+          id
+        },
+        data: {
+          post: {
+            ...post,
+            title: editPost.title,
+            description: editPost.description,
+            content: editPost.content
+          }
+        }
+      });
     },
     onError: (e) => {
       console.log(e);
@@ -211,15 +268,14 @@ function Post({ id }: PostProps) {
             <Menu>
               <MenuButton as={IconButton} rounded="full" variant="ghost" icon={<Icon w={6} h={6} as={DotsVerticalIcon} />} />
               <MenuList>
-                {isMe && <MenuItem 
-                  icon={<DeleteIcon />}
-                  onClick={() => deletePost()}
-                >
+                {isMe && <MenuItem icon={<Icon as={TrashIcon} h="4" w="4" />} onClick={() => deletePost()}>
                     Delete
                 </MenuItem>}
-                {isMe && <MenuItem icon={<EditIcon />} onClick={onOpen}>Edit</MenuItem>}
+                {isMe && <MenuItem icon={<Icon as={PencilAltIcon} h="4" w="4" />} onClick={onOpen}>
+                  Edit
+                </MenuItem>}
                 <MenuItem 
-                  icon={<LinkIcon />} 
+                  icon={<Icon as={ShareIcon} h="4" w="4" />} 
                   onClick={() => {
                     navigator.clipboard.writeText(String(window.location));
                     toast({
@@ -239,7 +295,9 @@ function Post({ id }: PostProps) {
           {/* LIKES AND COMMENTS FOR DESKTOP */}
           {!isMobile && <Box display={['none', 'none', 'block']}>
             <Flex mt="4" align="center">
-              <LikeButton style={{ width: '40px', height: '40px', color: isLiked ? '#F56565' : '#A0AEC0', cursor: 'pointer' }} onClick={handleLike} />
+              <Tooltip hasArrow label={isLiked ? 'Dislike this post' : 'Like this post'}>
+                <IconButton disabled={!isAuth} aria-label="like" variant="unstyled" icon={<Icon as={LikeButton} w="10" h="10" color={isLiked ? 'red.400' : 'gray.400'} />} onClick={handleLike} />
+              </Tooltip>
               <LikesBox borderColor={useColorModeValue('gray.50', 'gray.800')} ml="2" likes={post.likes} />
             </Flex>
             <CommentBox comments={post.comments} postId={post.id} />
@@ -251,7 +309,9 @@ function Post({ id }: PostProps) {
         {/* LIKES AND COMMENTS FOR MOBILE */}
         {isMobile && <Box display={['block', 'block', 'none']}>
           <Flex mt="4" align="center">
-            <LikeButton style={{ width: '40px', height: '40px', color: isLiked ? '#F56565' : '#A0AEC0', cursor: 'pointer' }} onClick={handleLike} />
+            <Tooltip hasArrow label={isLiked ? 'Dislike this post' : 'Like this post'}>
+              <IconButton disabled={!isAuth} aria-label="like" variant="unstyled" icon={<Icon as={LikeButton} w="10" h="10" color={isLiked ? 'red.400' : 'gray.400'} />} onClick={handleLike} />
+            </Tooltip>
             <LikesBox borderColor={useColorModeValue('gray.50', 'gray.800')} ml="2" likes={post.likes} />
           </Flex>
           <CommentBox comments={post.comments} postId={post.id} />

@@ -1,5 +1,5 @@
-import { Avatar, Flex, Heading, LinkBox, LinkOverlay, Stack, Text, Link as CLink, Box, useColorModeValue } from '@chakra-ui/react';
-import { ArrowForwardIcon } from '@chakra-ui/icons';
+import { Avatar, Flex, Heading, LinkBox, LinkOverlay, Stack, Text, Link as CLink, Box, useColorModeValue, Icon } from '@chakra-ui/react';
+import { ArrowRightIcon } from '@heroicons/react/outline';
 import Link from 'next/link';
 import React from 'react';
 import { UserQuery_user_posts } from '../__generated__/UserQuery';
@@ -27,7 +27,7 @@ function PostCard({ post, user }: PostCardProps) {
             </LinkOverlay>
           </Link>
         </Heading>
-        <ArrowForwardIcon color={`${COLOR_SCHEME}.400`} ml="4" w="6" h="6" />
+        <Icon as={ArrowRightIcon} color={`${COLOR_SCHEME}.400`} ml="4" w="6" h="6" />
       </Flex>
       <Text mt="2" fontSize="xl">{post.description}</Text>
       {user && 

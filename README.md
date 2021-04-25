@@ -11,9 +11,11 @@ The Blog for Developers
 - Postgresql
 - Docker
 
-## Run in local
+## Run locally
 
-To run locally this project using docker
+Create a `.env.local` file based on `.env.local.sample`
+
+To run this project using docker
 
 ```sh
 docker compose up

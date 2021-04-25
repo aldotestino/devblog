@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { Stack, Text, Button, Flex, Box, Heading, Link as CLink, useToast, useColorModeValue } from '@chakra-ui/react';
-import { LockIcon, ViewIcon, EmailIcon, AtSignIcon } from '@chakra-ui/icons';
+import { AtSymbolIcon, KeyIcon, MailIcon, PhotographIcon } from '@heroicons/react/outline';
 import { Formik, Form } from 'formik';
 import { validateSignupVariables } from '../utils/authHelpers';
 import { gql, useMutation } from '@apollo/client';
@@ -92,10 +92,10 @@ function Signup() {
                     <InputField name="name" placeholder="Name" errorMessage={formik.errors.name} type="text" isInvalid={formik.touched.name && !!formik.errors.name} />
                     <InputField name="surname" placeholder="Surname" errorMessage={formik.errors.surname} type="text" isInvalid={formik.touched.surname && !!formik.errors.surname} />
                   </Stack>
-                  <InputField name="email" icon={<EmailIcon />} placeholder="Email" errorMessage={formik.errors.email} type="text" isInvalid={formik.touched.email && !!formik.errors.email} />
-                  <InputField name="username" icon={<AtSignIcon />} errorMessage={formik.errors.username} placeholder="Username" type="text" isInvalid={formik.touched.username && !!formik.errors.username} />
-                  <InputField name="password" icon={<LockIcon />} placeholder="Password" errorMessage={formik.errors.password} type="password" isInvalid={formik.touched.password && !!formik.errors.password} />
-                  <InputField name="avatar" icon={<ViewIcon />} placeholder="Avatar" errorMessage={formik.errors.avatar} type="text" isInvalid={formik.touched.avatar && !!formik.errors.avatar} />
+                  <InputField name="email" icon={MailIcon} placeholder="Email" errorMessage={formik.errors.email} type="text" isInvalid={formik.touched.email && !!formik.errors.email} />
+                  <InputField name="username" icon={AtSymbolIcon} errorMessage={formik.errors.username} placeholder="Username" type="text" isInvalid={formik.touched.username && !!formik.errors.username} />
+                  <InputField name="password" icon={KeyIcon} placeholder="Password" errorMessage={formik.errors.password} type="password" isInvalid={formik.touched.password && !!formik.errors.password} />
+                  <InputField name="avatar" icon={PhotographIcon} placeholder="Avatar" errorMessage={formik.errors.avatar} type="text" isInvalid={formik.touched.avatar && !!formik.errors.avatar} />
                   <Button type="submit" colorScheme={COLOR_SCHEME} isLoading={loading}>Sign up</Button>
                   <Text>Already have an account?&nbsp;
                     <Link href="/login" passHref>     

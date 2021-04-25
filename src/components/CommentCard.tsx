@@ -1,6 +1,5 @@
-import { DeleteIcon, Icon } from '@chakra-ui/icons';
-import { Box, Text, Flex, Avatar, Link as CLink, useColorModeValue, Menu, MenuButton, MenuList, MenuItem, IconButton } from '@chakra-ui/react';
-import { DotsVerticalIcon } from '@heroicons/react/outline';
+import { Box, Text, Icon, Flex, Avatar, Link as CLink, useColorModeValue, Menu, MenuButton, MenuList, MenuItem, IconButton } from '@chakra-ui/react';
+import { DotsVerticalIcon, TrashIcon } from '@heroicons/react/outline';
 import Link from 'next/link';
 import React, { useMemo } from 'react';
 import { useAuth } from '../store/Auth';
@@ -76,9 +75,9 @@ function CommentCard({ comment, postId }: CommentCardProps) {
           </Box>
         </Flex>
         {isMe && <Menu>
-          <MenuButton as={IconButton} rounded="full" variant="ghost" icon={<Icon w={6} h={6} as={DotsVerticalIcon} />} />
+          <MenuButton as={IconButton} rounded="full" variant="ghost" icon={<Icon w="6" h="6" as={DotsVerticalIcon} />} />
           <MenuList>
-            <MenuItem icon={<DeleteIcon />} onClick={() => deleteComment()}>
+            <MenuItem icon={<Icon as={TrashIcon} w="4" h="4" />} onClick={() => deleteComment()}>
               Delete
             </MenuItem>
           </MenuList>

@@ -4,8 +4,11 @@ import React from 'react';
 import { COLOR_SCHEME } from '../styles/theme';
 import HomeImage from '../svg/HomeImage';
 import SEO from '../components/SEO';
+import { useAuth } from '../store/Auth';
 
 function Home() {
+
+  const { isAuth } = useAuth();
 
   return (
     <>
@@ -21,18 +24,18 @@ function Home() {
             Share your code thanks to the powerful markdown & code renderer for your posts.
           </Text>
           <Stack spacing="4" direction="row" mt="4" justify={['center', 'center', 'flex-start']}> 
-            <Link href="/signup" passHref>        
+            {!isAuth && <Link href="/signup" passHref>        
               <Button colorScheme={COLOR_SCHEME} as="a" size="lg">     
                 Sign up
               </Button>
-            </Link>
+            </Link>}
             <Button as="a" target="blank" href="https://github.com/aldotestino/devblog" size="lg">
               Follow on GitHub
             </Button>
           </Stack>
         </Box>
         <Flex flex="1" justify="center">
-          <HomeImage w={['xs', 'md', 'xl']} />
+          <HomeImage w="md" display={['none', 'none', 'block']} />
         </Flex>
       </Stack>
     </>
