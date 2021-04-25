@@ -13,7 +13,7 @@ function Home() {
 
       <Stack direction={['column', 'column', 'row']} spacing={['10', '10', '10']}>
         <Box textAlign={['center', 'center', 'left']}>
-          <Heading fontSize="6xl" bgGradient="linear(to-r, indigo.600, red.400)" bgClip="text">
+          <Heading fontSize="6xl" bgGradient="linear(to-r, indigo.500, green.500)" bgClip="text">
             The Blog for Developers
           </Heading>
           <Text fontSize="2xl" maxW={['full', 'full', 'xl']}>
