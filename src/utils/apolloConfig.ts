@@ -28,6 +28,9 @@ function createApolloClient() {
           fields: {
             comments: {
               merge: false // manually managing comments updates
+            },
+            likes: {
+              merge: false // manually managing likes updates
             }
           }
         }

@@ -8,7 +8,6 @@ import { gql, useMutation } from '@apollo/client';
 import { DeleteCommentMutation, DeleteCommentMutationVariables } from '../__generated__/DeleteCommentMutation';
 import { COLOR_SCHEME } from '../styles/theme';
 import { POST_QUERY } from '../pages/posts/[id]';
-import dateFormat from '../utils/dateFormat';
 
 const DELETE_COMMENT_MUTATION = gql`
   mutation DeleteCommentMutation($commentId: ID!) {
@@ -70,7 +69,7 @@ function CommentCard({ comment, postId }: CommentCardProps) {
                 </CLink>
               </Link>
               <br/>
-              {dateFormat(comment.createdAt)}
+              {new Date(comment.createdAt).toLocaleDateString()}
             </Text>
           </Box>
         </Flex>

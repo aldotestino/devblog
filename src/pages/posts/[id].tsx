@@ -1,6 +1,6 @@
 import { gql, useMutation, useQuery } from '@apollo/client';
 import { GetServerSideProps } from 'next';
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import { Avatar, Box, Flex, Heading, Text, Link as CLink, Stack, useToast, useBreakpointValue, Menu, MenuButton, MenuList, MenuItem, IconButton, Icon, useDisclosure, useColorModeValue, Tooltip } from '@chakra-ui/react';
 import { initializeApollo } from '../../utils/apolloConfig';
 import { PostQuery, PostQueryVariables, PostQuery_post_likes } from '../../__generated__/PostQuery';
@@ -18,7 +18,6 @@ import { EditPostMutation, EditPostMutationVariables } from '../../__generated__
 import Markdown from '../../components/Markdown';
 import { COLOR_SCHEME } from '../../styles/theme';
 import SEO from '../../components/SEO';
-import dateFormat from '../../utils/dateFormat';
 
 export const POST_QUERY = gql` 
   query PostQuery($id: ID!) {
@@ -84,7 +83,7 @@ function Post({ id }: PostProps) {
 
   const toast = useToast();
   const { onOpen, isOpen, onClose } = useDisclosure();
-  const { data: { post }, refetch } = useQuery<PostQuery, PostQueryVariables>(POST_QUERY, {
+  const { data: { post } } = useQuery<PostQuery, PostQueryVariables>(POST_QUERY, {
     variables: {
       id
     }
@@ -98,13 +97,6 @@ function Post({ id }: PostProps) {
       }
     },
     update: (cache, { data: { like } }) => {
-      const { post } = cache.readQuery<PostQuery, PostQueryVariables>({
-        query: POST_QUERY,
-        variables: {
-          id
-        }
-      });
-
       // if you have unliked remove the like
       if(!like) {
         cache.writeQuery<PostQuery, PostQueryVariables>({
@@ -197,13 +189,6 @@ function Post({ id }: PostProps) {
       onClose();
     },
     update: (cache, { data: { editPost } }) => {
-      const { post } = cache.readQuery<PostQuery, PostQueryVariables>({
-        query: POST_QUERY,
-        variables: {
-          id
-        }
-      });
-
       cache.writeQuery<PostQuery, PostQueryVariables>({
         query: POST_QUERY,
         variables: {
@@ -262,7 +247,7 @@ function Post({ id }: PostProps) {
                     </CLink>
                   </Link> 
                 </Text>
-                <Text>Posted on {dateFormat(post.createdAt)}</Text>
+                <Text>Posted on {new Date(post.createdAt).toLocaleDateString()}</Text>
               </Box>
             </Flex>
             <Menu>

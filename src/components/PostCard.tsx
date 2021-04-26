@@ -6,7 +6,6 @@ import { UserQuery_user_posts } from '../__generated__/UserQuery';
 import LikesBox from './LikesBox';
 import { FeedQuery_feed, FeedQuery_feed_user } from '../__generated__/FeedQuery';
 import { COLOR_SCHEME } from '../styles/theme';
-import dateFormat from '../utils/dateFormat';
 
 interface PostCardProps {
   post: UserQuery_user_posts | FeedQuery_feed
@@ -42,10 +41,10 @@ function PostCard({ post, user }: PostCardProps) {
                 </CLink>
               </Link>
             </Text>
-            <Text fontSize="base">Posted on {dateFormat(post.createdAt)}</Text>
+            <Text fontSize="base">Posted on {new Date(post.createdAt).toLocaleDateString()}</Text>
           </Box>
         </Stack>}
-      {!user && <Text>Posted on {dateFormat(post.createdAt)}</Text>}
+      {!user && <Text>Posted on {new Date(post.createdAt).toLocaleDateString()}</Text>}
       <LikesBox borderColor={bgColor} likes={post.likes} />
     </LinkBox>
   );
