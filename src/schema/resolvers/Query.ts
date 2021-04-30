@@ -23,7 +23,9 @@ const post: ResolverFunc<unknown, PostQueryVariables> = (_, { id }) => {
 const feed: ResolverFunc<unknown, unknown> = () => {
   return prisma.post.findMany({
     orderBy: {
-      createdAt: 'desc'
+      likes: {
+        count: 'desc'
+      }
     }
   });
 };
