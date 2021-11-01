@@ -15,6 +15,7 @@
 # db
 dev.db*
 /database-data
+/server/prisma/seed.ts
 
 # production
 /build
