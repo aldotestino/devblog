@@ -1,6 +1,6 @@
 import { gql, useMutation, useQuery } from '@apollo/client';
 import React, { createContext, ReactNode, useContext, useMemo, useState } from 'react';
-import { LogoutMutation } from '../__generated__/DeleteProfileMutation';
+import { LogoutMutation } from '../__generated__/LogoutMutation';
 import { LoginMutation_user } from '../__generated__/LoginMutation';
 import { MeQuery } from '../__generated__/MeQuery';
 

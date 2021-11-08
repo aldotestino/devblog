@@ -12,7 +12,7 @@ import { UserQuery, UserQueryVariables } from '../__generated__/UserQuery';
 import { useRouter } from 'next/router';
 import { EditProfileMutation, EditProfileMutationVariables } from '../__generated__/EditProfileMutation';
 import { COLOR_SCHEME } from '../styles/theme';
-import { DeleteProfileMutation } from '../__generated__/DeleteProfileMutation';
+import { DeleteProfileMutation } from '../__generated__/LogoutMutation';
 import ConfirmActionDialog from '../components/ConfirmActionDialog';
 import SEO from '../components/SEO';
 

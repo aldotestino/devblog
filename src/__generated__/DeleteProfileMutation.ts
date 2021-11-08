@@ -4,9 +4,9 @@
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL mutation operation: LogoutMutation
+// GraphQL mutation operation: DeleteProfileMutation
 // ====================================================
 
-export interface LogoutMutation {
-  logout: boolean;
+export interface DeleteProfileMutation {
+  deleteProfile: boolean;
 }
