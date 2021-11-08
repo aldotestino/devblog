@@ -38,11 +38,6 @@ export const typeDefs = gql`
     createdAt: DateTime
   }
 
-  type AuthPayload {
-    user: User!
-    token: String!
-  }
-
   type Query {
     user(username: String!): User
     post(id: ID!): Post
@@ -52,7 +47,8 @@ export const typeDefs = gql`
 
   type Mutation {
     signup(name: String!, surname: String!, email: String!, username: String! password: String!, avatar: String): Boolean!
-    login(username: String!, password: String!): AuthPayload
+    login(username: String!, password: String!): User
+    logout: Boolean!
     editProfile(name: String!, surname: String!, username: String!, avatar: String): User
     post(title: String!, description: String!, content: String!): Post!
     comment(content: String!, postId: ID!): Comment!

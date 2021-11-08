@@ -26,11 +26,6 @@ function CommentCard({ comment, postId }: CommentCardProps) {
   const bgColor = useColorModeValue('white', 'gray.700');
   const isMe = useMemo(() => isAuth && user.id === comment.user.id, [comment, user]);
   const [deleteComment] = useMutation<DeleteCommentMutation, DeleteCommentMutationVariables>(DELETE_COMMENT_MUTATION, {
-    context: {
-      headers: {
-        authorization: user?.token
-      }
-    },
     variables: {
       commentId: comment.id
     },

@@ -1,13 +1,17 @@
 import { ApolloServer } from 'apollo-server-micro';
 import { schema } from '../../schema';
 import { getUserId } from '../../utils/authHelpers';
+import cookies from '../../utils/cookiesHelper';
 
-const apolloServer = new ApolloServer({ 
+const apolloServer = new ApolloServer({
   schema,
-  context: ({ req }) => ({
-    ...req,
-    userId: req ? getUserId(req) : null
-  })
+  context: ({ req, res }) => {
+    return ({
+      req,
+      res,
+      userId: req ? getUserId(req) : null
+    });
+  }
 });
 
 export const config = {
@@ -16,4 +20,5 @@ export const config = {
   },
 };
 
-export default apolloServer.createHandler({ path: '/api/graphql' });
+const handler =  apolloServer.createHandler({ path: '/api/graphql' });
+export default cookies(handler);

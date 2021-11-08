@@ -78,11 +78,6 @@ function UserProfile({ username } : UserPageProps) {
   });
 
   const [editProfile, { loading }] = useMutation<EditProfileMutation, EditProfileMutationVariables>(EDIT_PROFILE_MUTATION, {
-    context: {
-      headers: {
-        authorization: user?.token
-      }
-    },
     onCompleted: ({ editProfile: { name, surname, username, avatar } }) => {
       const prevUsername = user.username;
       setUser(prevUser => ({
@@ -110,11 +105,6 @@ function UserProfile({ username } : UserPageProps) {
   });
 
   const [deleteProfile, { loading: deleteProfileLoading }] = useMutation<DeleteProfileMutation>(DELETE_PROFILE_MUTATION, {
-    context: {
-      headers: {
-        authorization: user?.token
-      }
-    },
     onCompleted: ({ deleteProfile }) => {
       if(deleteProfile) {
         dialogOnClose();

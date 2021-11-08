@@ -1,4 +1,4 @@
-import { Box, Button, Flex, Stack, useToast } from '@chakra-ui/react';
+import { Box, Button, Flex, Stack } from '@chakra-ui/react';
 import { Form, Formik } from 'formik';
 import React from 'react';
 import { useMutation, gql } from '@apollo/client';
@@ -32,14 +32,8 @@ interface CommentBoxProps {
 function CommentBox({ postId, comments }: CommentBoxProps) {
 
   const { isAuth, user } = useAuth();
-  const toast = useToast();
 
   const [comment, { loading }] = useMutation<CommentMutation, CommentMutationVariables>(COMMENT_MUTATION, {
-    context: {
-      headers: {
-        authorization: user?.token
-      }
-    },
     update: (cache, { data: { comment } }) => {
       // read the post query
       const { post } = cache.readQuery<PostQuery, PostQueryVariables>({

@@ -52,11 +52,6 @@ function CreatePost() {
         router.push(`/@${user.username}`);
       }
     },
-    context: {
-      headers: {
-        authorization: user?.token
-      }
-    }
   });
 
   const isMobile = useBreakpointValue({ base: true, md: false });

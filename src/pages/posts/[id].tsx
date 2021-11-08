@@ -91,11 +91,6 @@ function Post({ id }: PostProps) {
   const { isAuth, user } = useAuth(); 
   const isLiked =  post.likes.some(l => l.user.id === user?.id);
   const [like] = useMutation<LikeMutation, LikeMutationVariables>(LIKE_MUTATION, {
-    context: {
-      headers: {
-        authorization: user?.token
-      }
-    },
     update: (cache, { data: { like } }) => {
       // if you have unliked remove the like
       if(!like) {
@@ -144,11 +139,6 @@ function Post({ id }: PostProps) {
   const router = useRouter();
 
   const [deletePost] = useMutation<DeletePostMutation, DeletePostMutationVariables>(DELETE_POST_MUTATION, {
-    context: {
-      headers: {
-        authorization: user?.token
-      }
-    },
     variables: {
       postId: post.id
     },
@@ -180,11 +170,6 @@ function Post({ id }: PostProps) {
   }
 
   const [editPost, { loading }] = useMutation<EditPostMutation, EditPostMutationVariables>(EDIT_POST_MUTATION, {
-    context: {
-      headers: {
-        authorization: user?.token
-      }
-    },
     onCompleted: () => {
       onClose();
     },

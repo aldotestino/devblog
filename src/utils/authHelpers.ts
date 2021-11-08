@@ -1,4 +1,3 @@
-import { Request } from 'express';
 import jwt from 'jsonwebtoken';
 import { SignupMutationVariables } from '../__generated__/SignupMutation';
 import { LoginMutationVariables } from '../__generated__/LoginMutation';
@@ -93,9 +92,13 @@ export function validateEditProfileVariables(values: EditProfileMutationVariable
   return errors;
 }
 
-export function getUserId(req: Request): string | null {
-  if(!req.headers.authorization || req.headers.authorization === '') {
-    return null;
+export function getUserId(req: any): string | null {
+  if('access-token' in req.cookies) {
+    const token = req.cookies['access-token'];
+    if(token === '') {
+      return null;
+    }
+    return String(jwt.verify(req.cookies['access-token'], process.env.JWT_SECRET));
   }
-  return String(jwt.verify(req.headers.authorization, process.env.JWT_SECRET));
+  return null;
 }

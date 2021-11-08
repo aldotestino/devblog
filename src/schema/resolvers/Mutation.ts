@@ -25,7 +25,12 @@ const signup: ResolverFunc<unknown, SignupMutationVariables> = async (_, { passw
   return true;
 };
 
-const login: ResolverFunc<unknown, LoginMutationVariables> = async (_, { password, username }) => {
+const login: ResolverFunc<unknown, LoginMutationVariables> = async (_, { password, username }, { userId, res }) => {
+
+  if(userId) {
+    throw new Error('Already logged in');
+  }
+
   const user = await prisma.user.findUnique({
     where: {
       username
@@ -43,12 +48,21 @@ const login: ResolverFunc<unknown, LoginMutationVariables> = async (_, { passwor
   }
 
   const token = jwt.sign(user.id, process.env.JWT_SECRET);
-  
-  return {
-    token,
-    user
-  };
 
+  // set cookie
+  res.cookie('access-token', token, {});
+  
+  return user;
+};
+
+const logout: ResolverFunc<unknown, unknown> = async (_, __, { userId, res }) => {
+  if(!userId) {
+    return false;
+  }
+
+  // delete cookie
+  res.cookie('access-token', '', {});
+  return true;
 };
 
 const editProfile: ResolverFunc<unknown, EditProfileMutationVariables> = (_, args, { userId }) => {
@@ -180,6 +194,7 @@ const deleteProfile: ResolverFunc<unknown, unknown> = async (_, __, { userId }) 
 export {
   signup,
   login,
+  logout,
   editProfile,
   post,
   comment,

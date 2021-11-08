@@ -1,16 +1,8 @@
-import { gql, useQuery } from '@apollo/client';
+import { gql, useMutation, useQuery } from '@apollo/client';
 import React, { createContext, ReactNode, useContext, useMemo, useState } from 'react';
+import { LogoutMutation } from '../__generated__/DeleteProfileMutation';
+import { LoginMutation_user } from '../__generated__/LoginMutation';
 import { MeQuery } from '../__generated__/MeQuery';
-
-export interface User {
-  id: string
-  name: string
-  surname: string
-  username: string
-  email: string
-  token: string
-  avatar: string
-}
 
 const ME_QUERY = gql`
   query MeQuery {
@@ -25,9 +17,15 @@ const ME_QUERY = gql`
   }
 `;
 
+const LOGOUT_MUTATION = gql`
+  mutation {
+    logout
+  }
+`;
+
 export interface Auth {
-  user: User | null
-  setUser: React.Dispatch<React.SetStateAction<User | null>>
+  user: LoginMutation_user | null
+  setUser: React.Dispatch<React.SetStateAction<LoginMutation_user | null>>
   logout: () => void
   isAuth: boolean
 }
@@ -44,34 +42,27 @@ interface AuthProviderProps {
 
 export function AuthProvider({ children }: AuthProviderProps) {
 
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<LoginMutation_user | null>(null);
 
-  const token = typeof window !== 'undefined' && localStorage.getItem('token');  
-  
-  useQuery<MeQuery>(ME_QUERY, {
-    context: {
-      headers: {
-        authorization: token || ''
+  const [logout] = useMutation<LogoutMutation>(LOGOUT_MUTATION, {
+    onCompleted: ({ logout }) => {
+      if(logout) {
+        setUser(null);
       }
-    },
-    onCompleted: ({ me }) => {
-      setUser({
-        ...me,
-        token: localStorage.getItem('token')
-      });
     }
   });
   
-  function logout() {
-    setUser(null);
-    localStorage.removeItem('token');
-  }
+  useQuery<MeQuery>(ME_QUERY, {
+    onCompleted: ({ me }) => {
+      setUser(me);
+    }
+  });
 
   const store = useMemo(() => ({ 
     user, 
     setUser, 
     logout, 
-    isAuth: Boolean(user?.token && user.token !== '') 
+    isAuth: Boolean(user) 
   }), [user, setUser]);
 
   return (
